@@ -5,3 +5,4 @@ output/playwright/
 node_modules/
 .next/
 dist/
+.worktrees/
