@@ -1,0 +1,29 @@
+:root {
+  --color-warm-white: #f5f1e8;
+  --color-ink: #171717;
+  --color-graphite: #3f4247;
+  --color-silver: #b8bcc2;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--color-warm-white);
+}
+
+body {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: Arial, "Noto Sans SC", sans-serif;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
