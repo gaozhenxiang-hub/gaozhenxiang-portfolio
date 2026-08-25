@@ -1,0 +1,7 @@
+.superpowers/
+.playwright-cli/
+output/reference-analysis/
+output/playwright/
+node_modules/
+.next/
+dist/
