@@ -19,23 +19,72 @@ export function projectReleaseTarget(target: number, velocity: number, max: numb
   return clampPosition(target + projectedDistance, max);
 }
 
-export function calculateTopCurl(screenY: number) {
-  const fullCurlY = 125;
-  const noCurlY = 300;
-  const progress = Math.min(1, Math.max(0, (noCurlY - screenY) / (noCurlY - fullCurlY)));
+export function mapPointerDeltaToGallery(pointerDelta: number) {
+  return -pointerDelta * 2;
+}
+
+export function calculateDepthRecession(screenY: number) {
+  const startY = 420;
+  const fullDepthY = 225;
+  const progress = Math.min(1, Math.max(0, (startY - screenY) / (startY - fullDepthY)));
   return progress * progress * (3 - 2 * progress);
 }
 
-export function pinCurledScreenPosition(screenY: number) {
-  const pinY = 140;
-  if (screenY >= pinY) return screenY;
-  return pinY + (screenY - pinY) * 0.16;
+export function calculateDepthVisibility(screenY: number) {
+  const progress = Math.min(1, Math.max(0, (screenY + 220) / 140));
+  return progress * progress * (3 - 2 * progress);
 }
 
-export function calculateMetadataCurlShift(screenY: number, mediaHeight: number) {
-  const curl = calculateTopCurl(screenY);
-  const visualCenterY = pinCurledScreenPosition(screenY) + curl * 32;
-  return Math.max(0, screenY - visualCenterY + curl * mediaHeight * 0.43);
+export function calculateProjectedMediaHeight(
+  mediaHeight: number,
+  recession: number,
+  cameraDistance: number,
+) {
+  const depth = recession * 1600;
+  const tilt = recession * 1.18;
+  const perspectiveScale = cameraDistance / (cameraDistance + depth);
+  return mediaHeight * perspectiveScale * Math.max(0.08, Math.cos(tilt));
+}
+
+export function calculateDepthTransform(screenY: number, cameraDistance: number) {
+  const recession = calculateDepthRecession(screenY);
+  const overflow = Math.max(0, 225 - screenY);
+  const depth = recession * 1600 + overflow * 6.4;
+  const tilt = recession * 1.18 + Math.min(0.18, overflow * 0.0006);
+  const scale = cameraDistance / (cameraDistance + depth);
+  const horizontalCompensation = Math.pow(1 / scale, recession * 0.9);
+  const vanishingPathY = 225 + (screenY - 225) * 0.18;
+  const projectedScreenY = screenY + (vanishingPathY - screenY) * recession;
+
+  return {
+    recession,
+    depth,
+    tilt,
+    scale,
+    horizontalCompensation,
+    screenY: projectedScreenY,
+  };
+}
+
+export function calculateMetadataDepthLayout(
+  screenY: number,
+  mediaHeight: number,
+  cameraDistance: number,
+  cardCenterX: number,
+  viewportWidth: number,
+) {
+  const transform = calculateDepthTransform(screenY, cameraDistance);
+  const projectedHeight = mediaHeight * transform.scale * Math.max(0.08, Math.cos(transform.tilt));
+  const rawMetadataTop = screenY + mediaHeight / 2;
+  const projectedMetadataTop = transform.screenY + projectedHeight / 2;
+  const projectedHorizontalScale = transform.scale * transform.horizontalCompensation;
+
+  return {
+    shiftX: Number(((viewportWidth / 2 - cardCenterX) * (1 - projectedHorizontalScale)).toFixed(4)),
+    shiftY: Number((rawMetadataTop - projectedMetadataTop).toFixed(4)),
+    scale: Number(transform.scale.toFixed(4)),
+    opacity: Number(calculateDepthVisibility(screenY).toFixed(4)),
+  };
 }
 
 export function createMotionFrame(state: MotionState, deltaMs: number): MotionState {

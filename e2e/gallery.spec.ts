@@ -48,7 +48,7 @@ test("gallery starts at the captured desktop composition", async ({ page }) => {
   expect(cardBox?.y).toBeLessThanOrEqual(295);
 });
 
-test("curled cards remain rendered beneath the protected title area", async ({ page }) => {
+test("receding cards remain rendered beneath the protected title area", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.getByTestId("gallery-metadata-mask")).toHaveCount(0);

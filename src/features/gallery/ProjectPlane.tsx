@@ -12,8 +12,8 @@ import {
 
 import type { Project } from "@/content/projects";
 import {
-  calculateTopCurl,
-  pinCurledScreenPosition,
+  calculateDepthTransform,
+  calculateDepthVisibility,
   type MotionState,
 } from "./gallery-motion";
 import { galleryFragmentShader, galleryVertexShader } from "./gallery-shaders";
@@ -27,6 +27,7 @@ type ProjectPlaneProps = {
   width: number;
   height: number;
   viewportHeight: number;
+  cameraDistance: number;
   phase: number;
   motionRef: MotionRef;
 };
@@ -38,6 +39,7 @@ export function ProjectPlane({
   width,
   height,
   viewportHeight,
+  cameraDistance,
   phase,
   motionRef,
 }: ProjectPlaneProps) {
@@ -63,7 +65,8 @@ export function ProjectPlane({
       uVelocity: { value: 0 },
       uTime: { value: 0 },
       uPhase: { value: phase },
-      uCurl: { value: 0 },
+      uRecession: { value: 0 },
+      uDistanceAlpha: { value: 1 },
       uImageAspect: { value: imageAspect },
       uPlaneAspect: { value: width / height },
     }),
@@ -74,12 +77,17 @@ export function ProjectPlane({
     if (!meshRef.current || !materialRef.current) return;
     const velocity = Math.max(-1, Math.min(1, motionRef.current.velocity / 11));
     const rawScreenY = viewportHeight / 2 - (baseY + motionRef.current.current);
-    const visualScreenY = pinCurledScreenPosition(rawScreenY);
-    meshRef.current.position.y = viewportHeight / 2 - visualScreenY;
+    const depthTransform = calculateDepthTransform(rawScreenY, cameraDistance);
+    meshRef.current.position.x = x * depthTransform.horizontalCompensation;
+    meshRef.current.position.y = (viewportHeight / 2 - depthTransform.screenY) / depthTransform.scale;
+    meshRef.current.position.z = -depthTransform.depth;
+    meshRef.current.rotation.x = -depthTransform.tilt;
     meshRef.current.rotation.z = velocity * 0.0035;
+    meshRef.current.scale.x = depthTransform.horizontalCompensation;
     materialRef.current.uniforms.uVelocity.value = velocity;
     materialRef.current.uniforms.uTime.value = clock.elapsedTime;
-    materialRef.current.uniforms.uCurl.value = calculateTopCurl(rawScreenY);
+    materialRef.current.uniforms.uRecession.value = depthTransform.recession;
+    materialRef.current.uniforms.uDistanceAlpha.value = calculateDepthVisibility(rawScreenY);
   });
 
   return (

@@ -3,10 +3,11 @@
 import { useEffect, useRef } from "react";
 
 import {
-  calculateMetadataCurlShift,
+  calculateMetadataDepthLayout,
   clampPosition,
   createMotionFrame,
   mapVelocityToVisuals,
+  mapPointerDeltaToGallery,
   projectReleaseTarget,
   type MotionState,
 } from "./gallery-motion";
@@ -61,7 +62,7 @@ export function useDragGallery() {
       const elapsed = Math.max(event.timeStamp - previousPointerTime, 8);
       previousPointerY = event.clientY;
       previousPointerTime = event.timeStamp;
-      const galleryDelta = -delta * 1.38;
+      const galleryDelta = mapPointerDeltaToGallery(delta);
       const instantaneousVelocity = galleryDelta / elapsed;
       pointerVelocity = pointerVelocity * 0.38 + instantaneousVelocity * 0.62;
       setTarget(motionRef.current.target + galleryDelta);
@@ -91,12 +92,24 @@ export function useDragGallery() {
       stage.style.setProperty("--gallery-stretch", visuals.stretch.toFixed(4));
       const grid = stage.querySelector<HTMLElement>(".gallery-grid--metadata");
       if (grid) {
+        const cameraDistance = window.innerHeight / (2 * Math.tan((35 * Math.PI) / 360));
+        const gridLeft = (window.innerWidth - grid.offsetWidth) / 2;
         cards.forEach((card) => {
           const media = card.querySelector<HTMLElement>(".project-media");
           if (!media) return;
           const centerY = grid.offsetTop + card.offsetTop + media.offsetHeight / 2 - motionRef.current.current;
-          const shift = calculateMetadataCurlShift(centerY, media.offsetHeight);
-          card.style.setProperty("--meta-curl-shift", shift.toFixed(3));
+          const centerX = gridLeft + card.offsetLeft + card.offsetWidth / 2;
+          const layout = calculateMetadataDepthLayout(
+            centerY,
+            media.offsetHeight,
+            cameraDistance,
+            centerX,
+            window.innerWidth,
+          );
+          card.style.setProperty("--meta-depth-x", layout.shiftX.toFixed(3));
+          card.style.setProperty("--meta-depth-y", layout.shiftY.toFixed(3));
+          card.style.setProperty("--meta-depth-scale", layout.scale.toFixed(4));
+          card.style.setProperty("--meta-depth-opacity", layout.opacity.toFixed(4));
         });
       }
       animationFrame = requestAnimationFrame(tick);

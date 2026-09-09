@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  calculateTopCurl,
-  calculateMetadataCurlShift,
+  calculateDepthRecession,
+  calculateDepthTransform,
+  calculateDepthVisibility,
+  calculateMetadataDepthLayout,
+  calculateProjectedMediaHeight,
   clampPosition,
   createMotionFrame,
   mapVelocityToVisuals,
-  pinCurledScreenPosition,
+  mapPointerDeltaToGallery,
   projectReleaseTarget,
 } from "./gallery-motion";
 
@@ -49,21 +52,48 @@ describe("gallery motion", () => {
     expect(projectReleaseTarget(580, 360, 5000)).toBeLessThanOrEqual(1040);
   });
 
-  it("rolls cards into the top boundary without removing them", () => {
-    expect(calculateTopCurl(320)).toBe(0);
-    expect(calculateTopCurl(110)).toBe(1);
-    expect(calculateTopCurl(215)).toBeGreaterThan(0);
-    expect(calculateTopCurl(215)).toBeLessThan(1);
+  it("matches the source's high-distance mouse drag response", () => {
+    expect(mapPointerDeltaToGallery(-100)).toBe(200);
+    expect(mapPointerDeltaToGallery(100)).toBe(-200);
   });
 
-  it("holds a fully curled row near the header while allowing it to keep moving", () => {
-    expect(pinCurledScreenPosition(220)).toBe(220);
-    expect(pinCurledScreenPosition(0)).toBeGreaterThan(95);
-    expect(pinCurledScreenPosition(-1000)).toBeLessThan(0);
+  it("moves and scales metadata with the receding media plane", () => {
+    const front = calculateMetadataDepthLayout(430, 300, 1400, 350, 1440);
+    const receding = calculateMetadataDepthLayout(225, 300, 1400, 350, 1440);
+    expect(front).toEqual({ shiftX: 0, shiftY: 0, scale: 1, opacity: 1 });
+    expect(receding.shiftX).toBeGreaterThan(0);
+    expect(receding.shiftY).toBeGreaterThan(0);
+    expect(receding.scale).toBeLessThan(1);
   });
 
-  it("pulls metadata toward the compressed image height", () => {
-    expect(calculateMetadataCurlShift(320, 300)).toBe(0);
-    expect(calculateMetadataCurlShift(110, 300)).toBeCloseTo(71.8, 4);
+  it("increases depth recession only inside the top approach zone", () => {
+    expect(calculateDepthRecession(430)).toBe(0);
+    expect(calculateDepthRecession(225)).toBe(1);
+    expect(calculateDepthRecession(320)).toBeGreaterThan(0);
+    expect(calculateDepthRecession(320)).toBeLessThan(1);
+  });
+
+  it("foreshortens media as it moves away from the viewer", () => {
+    expect(calculateProjectedMediaHeight(300, 0, 1400)).toBe(300);
+    expect(calculateProjectedMediaHeight(300, 1, 1400)).toBeLessThan(90);
+  });
+
+  it("keeps receding rows on a vanishing path while depth continues increasing", () => {
+    const horizon = calculateDepthTransform(225, 1400);
+    const distant = calculateDepthTransform(-300, 1400);
+    expect(horizon.screenY).toBeCloseTo(225, 4);
+    expect(horizon.depth).toBeGreaterThanOrEqual(1500);
+    expect(horizon.tilt).toBeGreaterThan(1.1);
+    expect(horizon.horizontalCompensation).toBeGreaterThan(1);
+    expect(distant.depth).toBeGreaterThan(horizon.depth);
+    expect(distant.scale).toBeLessThan(horizon.scale);
+    expect(distant.screenY).toBeLessThan(horizon.screenY);
+  });
+
+  it("fades a row only after it has travelled beyond the visible depth band", () => {
+    expect(calculateDepthVisibility(-60)).toBe(1);
+    expect(calculateDepthVisibility(-150)).toBeGreaterThan(0);
+    expect(calculateDepthVisibility(-150)).toBeLessThan(1);
+    expect(calculateDepthVisibility(-230)).toBe(0);
   });
 });

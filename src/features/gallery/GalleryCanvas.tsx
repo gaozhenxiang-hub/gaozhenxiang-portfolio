@@ -1,8 +1,9 @@
 "use client";
 
+import { PerspectiveCamera } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
-import { AdditiveBlending, type Group } from "three";
+import type { Group } from "three";
 
 import { projects } from "@/content/projects";
 import type { MotionState } from "./gallery-motion";
@@ -12,13 +13,13 @@ type MotionRef = { current: MotionState };
 
 function SoftSculptureMaterial() {
   return (
-    <meshBasicMaterial
-      color="#ffffff"
+    <meshPhongMaterial
+      color="#d9e3de"
       transparent
-      opacity={0.42}
-      blending={AdditiveBlending}
+      opacity={0.32}
+      shininess={108}
+      specular="#ffffff"
       depthWrite={false}
-      toneMapped={false}
     />
   );
 }
@@ -31,7 +32,7 @@ function BackgroundSculpture({ motionRef }: { motionRef: MotionRef }) {
     if (!groupRef.current) return;
     const velocity = Math.max(-1, Math.min(1, motionRef.current.velocity / 16));
     const time = clock.elapsedTime;
-    groupRef.current.rotation.z = Math.sin(time * 0.12) * 0.018 + velocity * 0.006;
+    groupRef.current.rotation.z = 0.006 + Math.sin(time * 0.12) * 0.018 + velocity * 0.006;
     groupRef.current.rotation.x = Math.sin(time * 0.18) * 0.008;
     groupRef.current.position.y = Math.sin(time * 0.25) * 9 + Math.sin(motionRef.current.current * 0.0015) * 12;
   });
@@ -40,19 +41,14 @@ function BackgroundSculpture({ motionRef }: { motionRef: MotionRef }) {
   const topY = size.height / 2;
   return (
     <group ref={groupRef} position={[0, 0, -180]}>
-      <mesh position={[-edgeX - 455, -20, 0]} rotation={[0.18, 0.06, -0.08]}>
-        <torusGeometry args={[585, 64, 36, 128]} />
+      <mesh position={[-edgeX - 560, -20, 0]} rotation={[0.18, 0.06, -0.035]}>
+        <torusGeometry args={[585, 50, 36, 128]} />
         <SoftSculptureMaterial />
       </mesh>
-      <mesh position={[edgeX + 475, 5, -10]} rotation={[-0.12, 0.04, 0.08]}>
-        <torusGeometry args={[600, 68, 36, 128]} />
+      <mesh position={[edgeX + 575, 5, -10]} rotation={[-0.12, 0.04, 0.035]}>
+        <torusGeometry args={[600, 52, 36, 128]} />
         <SoftSculptureMaterial />
       </mesh>
-      <mesh position={[55, topY + 510, -35]} rotation={[0.12, 0.02, 0]}>
-        <torusGeometry args={[570, 46, 32, 128]} />
-        <SoftSculptureMaterial />
-      </mesh>
-
       {[
         [-edgeX + 120, topY - 132, -5, 22, 7],
         [edgeX - 380, topY - 108, -12, 17, 6],
@@ -76,6 +72,8 @@ function BackgroundSculpture({ motionRef }: { motionRef: MotionRef }) {
 function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
   const { size } = useThree();
   const didSignalReady = useRef(false);
+  const fov = 35;
+  const cameraDistance = size.height / (2 * Math.tan((fov * Math.PI) / 360));
   const gridWidth = Math.min(size.width - 140, 1304);
   const gap = 42;
   const cardWidth = (gridWidth - gap) / 2;
@@ -92,6 +90,16 @@ function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
 
   return (
     <>
+      <PerspectiveCamera
+        makeDefault
+        fov={fov}
+        position={[0, 0, cameraDistance]}
+        near={0.1}
+        far={10000}
+      />
+      <ambientLight intensity={0.72} />
+      <directionalLight color="#ffffff" intensity={2.4} position={[-420, 520, 720]} />
+      <directionalLight color="#d8e6e2" intensity={1.1} position={[560, -120, 420]} />
       <BackgroundSculpture motionRef={motionRef} />
       {projects.map((project, index) => {
         const column = index % 2;
@@ -108,6 +116,7 @@ function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
             width={cardWidth}
             height={cardHeight}
             viewportHeight={size.height}
+            cameraDistance={cameraDistance}
             phase={index * 1.37}
             motionRef={motionRef}
           />
@@ -121,8 +130,6 @@ export function GalleryCanvas({ motionRef }: { motionRef: MotionRef }) {
   return (
     <div className="gallery-canvas" aria-hidden="true" data-testid="gallery-canvas">
       <Canvas
-        orthographic
-        camera={{ position: [0, 0, 1000], zoom: 1, near: 0.1, far: 2000 }}
         dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       >
