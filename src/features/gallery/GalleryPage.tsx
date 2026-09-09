@@ -9,7 +9,7 @@ import { useDragGallery } from "./useDragGallery";
 import "./gallery.css";
 
 const filters = [
-  { label: "All", count: 20 },
+  { label: "All", count: 22 },
   { label: "Branding", count: 5 },
   { label: "Digital", count: 20 },
   { label: "Motion", count: 5 },
@@ -17,13 +17,14 @@ const filters = [
 ];
 
 export function GalleryPage() {
-  const { stageRef, motionRef } = useDragGallery();
+  const { stageRef, motionRef, pointerRef } = useDragGallery();
 
   return (
     <main
       className="gallery-stage"
       data-testid="gallery-stage"
       data-dragging="false"
+      data-pointer-active="false"
       ref={stageRef}
     >
       <div className="gallery-atmosphere" aria-hidden="true" />
@@ -54,7 +55,7 @@ export function GalleryPage() {
       </section>
 
       <div className="gallery-viewport">
-        <GalleryCanvas motionRef={motionRef} />
+        <GalleryCanvas motionRef={motionRef} pointerRef={pointerRef} />
         <div className="gallery-grid gallery-grid--metadata">
           {projects.map((project) => (
             <article className="project-card" data-testid="project-card" key={project.id}>

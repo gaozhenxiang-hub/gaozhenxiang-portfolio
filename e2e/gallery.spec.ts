@@ -4,7 +4,7 @@ test("gallery renders and responds to wheel and pointer drag", async ({ page }) 
   await page.goto("/");
 
   await expect(page.getByRole("heading", { name: "Selected Projects" })).toBeVisible();
-  await expect(page.getByTestId("project-card")).toHaveCount(12);
+  await expect(page.getByTestId("project-card")).toHaveCount(22);
 
   const stage = page.getByTestId("gallery-stage");
   await expect(stage).toHaveClass(/webgl-ready/);
@@ -22,6 +22,11 @@ test("gallery renders and responds to wheel and pointer drag", async ({ page }) 
   expect(afterWheel).not.toBe(before);
 
   await page.mouse.move(760, 650);
+  await expect(stage).toHaveAttribute("data-pointer-active", "true");
+  const pointerStrength = await stage.evaluate((element) =>
+    Number(getComputedStyle(element).getPropertyValue("--pointer-strength")),
+  );
+  expect(pointerStrength).toBeGreaterThan(0);
   await page.mouse.down();
   await expect(stage).toHaveAttribute("data-dragging", "true");
   await page.mouse.move(760, 280, { steps: 8 });

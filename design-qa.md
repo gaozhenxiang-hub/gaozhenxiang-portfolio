@@ -2,11 +2,12 @@
 
 ## Comparison setup
 
-- Source visual truth: `output/reference/unseen-recording-frame.png` and `output/reference/feedback-0827-sheet.png`, extracted from the user recordings including `20260909-0827-38.7693774.mp4`.
+- Source visual truth: `output/reference/unseen-recording-frame.png`, `output/reference/feedback-0827-sheet.png`, and `output/reference/feedback-1049-sheet.png`, extracted from the supplied recordings including `20260909-1049-41.2257840.mp4`.
 - Implementation rest capture: `output/qa/gallery-chrome-recording-reference.png`.
-- Implementation motion captures: `output/qa/gallery-drag-chrome-1440.png` and `output/qa/gallery-depth-chrome-1440.png`.
+- Implementation motion captures: `output/qa/gallery-drag-chrome-1440.png`, `output/qa/gallery-depth-chrome-1440.png`, and `output/qa/gallery-pointer-ripple-chrome-recording-reference.png`.
 - Full-view comparison input: `output/qa/comparison-rest-source-vs-local.png`.
 - Focused motion comparison input: `output/qa/comparison-motion-source-vs-local.png`.
+- Latest pointer and drag comparisons: `output/qa/comparison-feedback-1049-pointer.png` and `output/qa/comparison-feedback-1049-drag.png`.
 - Rest-motion evidence: `output/qa/gallery-rest-motion-diff-current.png`, generated from two no-input frames 1.4 seconds apart.
 - Matched recording viewport: Chrome 1459 × 861 CSS px at device scale 1.5. Source is 2188 × 1292 px; implementation is 2189 × 1292 px. The source was normalized by one horizontal pixel for the combined comparison.
 - Cross-browser viewports: Chrome 1440 × 900 at scale 1; Edge 1920 × 1080 at scale 1.
@@ -23,6 +24,13 @@
 6. **P2 — no-input motion was too difficult to see.** Ambient vertex displacement and UV refraction were strengthened and given a subtle persistent chromatic split. The two-frame difference image shows motion along card edges and inside the imagery without pointer input.
 7. **P2 — pointer travel was slower than the recording.** Drag distance now maps at 2× pointer displacement while release momentum remains bounded, which brings the next foreground row into view at the same interaction scale as the supplied recording.
 8. Post-fix visual comparison shows the source and implementation share the required hierarchy, two-column proportions, card order, pale atmosphere, visible rest ripple, curved active drag, thin receding band, and clear protected heading.
+9. **P1 — pointer movement previously had no spatially local response.** Viewport-normalized pointer position, velocity, drag energy, and decay are now tracked independently of gallery scroll. Every media plane receives the same field, so the effect follows the cursor continuously across cards.
+10. **P1 — the first light pass formed an opaque white orb.** Side-by-side inspection against the 10:49 recording showed that broad whitening hid the image. The final pass uses a small glint, travelling ring highlights, texture refraction, and a restrained chromatic rim, preserving image detail while making the water response clearly visible.
+11. **P2 — drag bending was too uniformly arched.** The large symmetric velocity bow was reduced from 28 to 12 world units. Phase-offset diagonal, edge-lag, twist, and delayed drag waves now create smaller asymmetric membrane motion.
+12. **P2 — depth shrink completed too abruptly and remained too thick.** The easing interval now runs from a 420 px center to 150 px, response smoothing changed from 0.82 to 0.88, full depth increased from 1600 to 2200 world units, and maximum tilt increased from 1.18 to 1.34 radians.
+13. **P2 — too few examples shortened the experience.** Ten neutral, replaceable English studies were added using bundled local imagery. The visible total and automated expectations now report 22 entries without inventing new clients or claims.
+14. **P1 — independent review found card-boundary phase discontinuity.** Pointer rings no longer include each card's ambient `uPhase`, so equal viewport distances share one continuous wave phase across the two-column seam.
+15. **P1 — independent review found a false first-move spike.** Pointer enter/down now initializes coordinates and time, while a first-move sentinel prevents a stationary cursor from being measured against `(0, 0)`. Velocity is normalized by elapsed time for consistent response across mouse polling rates.
 
 ## Required fidelity surfaces
 
@@ -34,11 +42,11 @@
 
 ## Interaction and browser checks
 
-- Chrome 1440 × 900: 12 cards rendered; wheel, pointer down/drag/up, bounded inertia, depth recession, far-depth fade, and protected heading verified.
+- Chrome 1440 × 900: 22 cards rendered; wheel, hover pointer ripple, pointer down/drag/up, bounded inertia, depth recession, far-depth fade, and protected heading verified.
 - Edge 1920 × 1080: the same interaction suite passed at the wider viewport.
-- Visual capture suite: 9/9 captures passed across Chrome, Edge, and the matched recording viewport.
-- Standard browser suite: 6 passed; 6 opt-in visual capture cases skipped as designed.
-- Unit/component suite: 22 passed across 5 files.
+- Visual capture suite: 12/12 captures passed across Chrome, Edge, and the matched recording viewport.
+- Standard browser suite: 9 passed; 12 opt-in visual capture cases skipped as designed.
+- Unit/component suite: 27 passed across 5 files.
 - Lint, TypeScript, and production build: passed.
 - Console: no application errors observed. The upstream Three.js clock deprecation warning remains non-blocking.
 

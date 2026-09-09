@@ -6,10 +6,11 @@ import { Suspense, useRef } from "react";
 import type { Group } from "three";
 
 import { projects } from "@/content/projects";
-import type { MotionState } from "./gallery-motion";
+import type { MotionState, PointerInteractionState } from "./gallery-motion";
 import { ProjectPlane } from "./ProjectPlane";
 
 type MotionRef = { current: MotionState };
+type PointerRef = { current: PointerInteractionState };
 
 function SoftSculptureMaterial() {
   return (
@@ -69,7 +70,7 @@ function BackgroundSculpture({ motionRef }: { motionRef: MotionRef }) {
   );
 }
 
-function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
+function GalleryScene({ motionRef, pointerRef }: { motionRef: MotionRef; pointerRef: PointerRef }) {
   const { size } = useThree();
   const didSignalReady = useRef(false);
   const fov = 35;
@@ -119,6 +120,7 @@ function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
             cameraDistance={cameraDistance}
             phase={index * 1.37}
             motionRef={motionRef}
+            pointerRef={pointerRef}
           />
         );
       })}
@@ -126,7 +128,7 @@ function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
   );
 }
 
-export function GalleryCanvas({ motionRef }: { motionRef: MotionRef }) {
+export function GalleryCanvas({ motionRef, pointerRef }: { motionRef: MotionRef; pointerRef: PointerRef }) {
   return (
     <div className="gallery-canvas" aria-hidden="true" data-testid="gallery-canvas">
       <Canvas
@@ -134,7 +136,7 @@ export function GalleryCanvas({ motionRef }: { motionRef: MotionRef }) {
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       >
         <Suspense fallback={null}>
-          <GalleryScene motionRef={motionRef} />
+          <GalleryScene motionRef={motionRef} pointerRef={pointerRef} />
         </Suspense>
       </Canvas>
     </div>
