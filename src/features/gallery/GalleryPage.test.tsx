@@ -27,12 +27,12 @@ describe("GalleryPage", () => {
     expect(screen.queryByTestId("gallery-metadata-mask")).not.toBeInTheDocument();
   });
 
-  it("renders the captured filter labels as non-interactive display controls", () => {
+  it("omits the project category filter row", () => {
     render(<GalleryPage />);
 
-    expect(screen.getByText("All")).toBeVisible();
-    expect(screen.getByText("Branding")).toBeVisible();
-    expect(screen.getByText("Experiment")).toBeVisible();
+    expect(screen.queryByText("All")).not.toBeInTheDocument();
+    expect(screen.queryByText("Branding")).not.toBeInTheDocument();
+    expect(screen.queryByText("Experiment")).not.toBeInTheDocument();
   });
 
   it("renders the approved contact finale with callable links", () => {

@@ -9,14 +9,6 @@ import { useDragGallery } from "./useDragGallery";
 
 import "./gallery.css";
 
-const filters = [
-  { label: "All", count: 22 },
-  { label: "Branding", count: 5 },
-  { label: "Digital", count: 20 },
-  { label: "Motion", count: 5 },
-  { label: "Experiment", count: 6 },
-];
-
 export function GalleryPage() {
   const { stageRef, motionRef, pointerRef } = useDragGallery();
 
@@ -46,13 +38,6 @@ export function GalleryPage() {
 
       <section className="gallery-filter" aria-label="Project filters">
         <h1>Selected Projects</h1>
-        <div className="filter-row">
-          {filters.map((filter, index) => (
-            <span className={index === 0 ? "active" : ""} key={filter.label}>
-              {filter.label}<sup>{filter.count}</sup>
-            </span>
-          ))}
-        </div>
       </section>
 
       <div className="gallery-viewport">

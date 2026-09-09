@@ -126,40 +126,6 @@
   letter-spacing: -0.034em;
 }
 
-.filter-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  margin-top: 8px;
-}
-
-.filter-row span {
-  display: inline-flex;
-  min-height: 26px;
-  padding: 6px 13px 5px;
-  align-items: center;
-  border: 1px solid rgba(33, 33, 33, 0.06);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.67);
-  font-size: clamp(12px, 0.8vw, 14px);
-  line-height: 1;
-  letter-spacing: -0.028em;
-}
-
-.filter-row span.active {
-  border-color: #212121;
-  color: #faf6f4;
-  background: #212121;
-}
-
-.filter-row sup {
-  position: relative;
-  top: -0.36em;
-  margin-left: 2px;
-  font-size: 0.56em;
-}
-
 .gallery-viewport,
 .gallery-canvas { position: fixed; inset: 0; }
 .gallery-canvas { z-index: 1; }
