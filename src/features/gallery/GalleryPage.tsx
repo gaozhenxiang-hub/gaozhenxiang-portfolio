@@ -22,20 +22,6 @@ export function GalleryPage() {
     >
       <div className="gallery-atmosphere" aria-hidden="true" />
 
-      <header className="gallery-header">
-        <div className="gallery-brand">
-          unseen studio<sup>®</sup>
-        </div>
-        <nav className="gallery-nav" aria-label="Primary">
-          <span>Index</span>
-          <span aria-current="page">Projects</span>
-          <span>Contact</span>
-          <span className="gallery-menu" aria-label="Menu">
-            <img src="/gallery/menu-dots.svg" alt="" />
-          </span>
-        </nav>
-      </header>
-
       <section className="gallery-filter" aria-label="Project filters">
         <h1>Selected Projects</h1>
       </section>

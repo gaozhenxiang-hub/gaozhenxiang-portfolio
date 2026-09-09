@@ -35,6 +35,14 @@ describe("GalleryPage", () => {
     expect(screen.queryByText("Experiment")).not.toBeInTheDocument();
   });
 
+  it("omits the original studio brand and top navigation", () => {
+    render(<GalleryPage />);
+
+    expect(screen.queryByText("unseen studio")).not.toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Primary" })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Menu")).not.toBeInTheDocument();
+  });
+
   it("renders the approved contact finale with callable links", () => {
     render(<GalleryPage />);
 
