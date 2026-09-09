@@ -114,7 +114,7 @@ After activating the pointer state, stop mouse movement, wait `500` milliseconds
 
 - [ ] **Step 2: Run the focused browser test and verify RED**
 
-Run: `npx playwright test e2e/gallery.spec.ts --project=chromium`
+Run: `npx playwright test e2e/gallery.spec.ts --project=chrome-1440`
 
 Expected: FAIL because the current `0.06` hover floor keeps the pointer active.
 
@@ -124,7 +124,7 @@ Import `calculatePointerImpulse`. Replace the fixed `0.38 + speed * 0.34` activa
 
 - [ ] **Step 4: Run the focused browser test and verify GREEN**
 
-Run: `npx playwright test e2e/gallery.spec.ts --project=chromium`
+Run: `npx playwright test e2e/gallery.spec.ts --project=chrome-1440`
 
 Expected: all gallery browser tests pass.
 
@@ -146,13 +146,13 @@ Expected: ESLint exits with zero errors, all Vitest tests pass, and the Next.js 
 
 - [ ] **Step 3: Run standard Chrome and Edge interaction coverage**
 
-Run: `npx playwright test e2e/gallery.spec.ts --project=chromium --project=msedge`
+Run: `npx playwright test e2e/gallery.spec.ts --project=chrome-1440 --project=edge-1080p --project=chrome-recording-reference`
 
 Expected: all standard desktop interaction tests pass in both browser projects.
 
 - [ ] **Step 4: Capture visual QA states**
 
-Run: `$env:CAPTURE_QA='1'; npx playwright test e2e/visual-capture.spec.ts --project=chromium --project=msedge; Remove-Item Env:CAPTURE_QA`
+Run: `$env:CAPTURE_QA='1'; npx playwright test e2e/visual-capture.spec.ts --project=chrome-1440 --project=edge-1080p --project=chrome-recording-reference; Remove-Item Env:CAPTURE_QA`
 
 Expected: rest, drag, pointer-motion, and depth screenshots are written under `output/qa/` for both browsers.
 

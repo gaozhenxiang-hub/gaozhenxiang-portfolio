@@ -34,16 +34,16 @@ test("capture the active drag deformation", async ({ page }, testInfo) => {
   await page.mouse.up();
 });
 
-test("capture the pointer-local liquid light without dragging", async ({ page }, testInfo) => {
+test("capture the pointer-velocity image response without dragging", async ({ page }, testInfo) => {
   test.skip(process.env.CAPTURE_QA !== "1", "Run with CAPTURE_QA=1 for visual QA artifacts.");
 
   await page.goto("/");
   await expect(page.getByTestId("gallery-stage")).toHaveClass(/webgl-ready/);
   await page.mouse.move(360, 730);
   await page.mouse.move(510, 520, { steps: 10 });
-  await page.waitForTimeout(48);
+  await page.waitForTimeout(16);
   await page.screenshot({
-    path: `output/qa/gallery-pointer-ripple-${testInfo.project.name}.png`,
+    path: `output/qa/gallery-pointer-motion-${testInfo.project.name}.png`,
     fullPage: false,
   });
 });

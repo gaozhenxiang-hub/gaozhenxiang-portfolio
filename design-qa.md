@@ -2,56 +2,54 @@
 
 ## Comparison setup
 
-- Source visual truth: `output/reference/unseen-recording-frame.png`, `output/reference/feedback-0827-sheet.png`, and `output/reference/feedback-1049-sheet.png`, extracted from the supplied recordings including `20260909-1049-41.2257840.mp4`.
-- Implementation rest capture: `output/qa/gallery-chrome-recording-reference.png`.
-- Implementation motion captures: `output/qa/gallery-drag-chrome-1440.png`, `output/qa/gallery-depth-chrome-1440.png`, and `output/qa/gallery-pointer-ripple-chrome-recording-reference.png`.
-- Full-view comparison input: `output/qa/comparison-rest-source-vs-local.png`.
-- Focused motion comparison input: `output/qa/comparison-motion-source-vs-local.png`.
-- Latest pointer and drag comparisons: `output/qa/comparison-feedback-1049-pointer.png` and `output/qa/comparison-feedback-1049-drag.png`.
-- Rest-motion evidence: `output/qa/gallery-rest-motion-diff-current.png`, generated from two no-input frames 1.4 seconds apart.
-- Matched recording viewport: Chrome 1459 × 861 CSS px at device scale 1.5. Source is 2188 × 1292 px; implementation is 2189 × 1292 px. The source was normalized by one horizontal pixel for the combined comparison.
-- Cross-browser viewports: Chrome 1440 × 900 at scale 1; Edge 1920 × 1080 at scale 1.
-- State: initial/resting gallery, active pointer drag, released inertia, and a row fully receding toward the vanishing path.
-- Scope: desktop Projects gallery and pointer/wheel interaction. Mobile, project detail pages, menu, sound, and production filter behavior are intentionally out of scope.
+- Source visual truth: `output/reference/feedback-1049-pointer-4_8.png` and the two-frame interaction detail `output/reference/feedback-1049-pointer-detail.png`, extracted from the supplied `20260909-1049-41.2257840.mp4` recording; the live source was also opened in the user's Chrome profile at `https://unseen.co/projects/`.
+- Implementation rest capture: `output/qa/gallery-rest-later-chrome-recording-reference.png`.
+- Implementation pointer capture: `output/qa/gallery-pointer-motion-chrome-recording-reference.png`.
+- Implementation drag/depth captures: `output/qa/gallery-drag-chrome-recording-reference.png` and `output/qa/gallery-depth-chrome-recording-reference.png`.
+- Full-view comparison input: `output/qa/comparison-feedback-1049-pointer-velocity.png`.
+- Focused before/after pointer comparison: `output/qa/comparison-pointer-velocity-sequence.png` and `output/qa/comparison-pointer-local-crop.png`.
+- Source pixels: 2560 × 1528 including browser chrome. Implementation pixels: 2189 × 1292 from a 1459 × 861 CSS viewport at device scale 1.5. The implementation was scaled to the source canvas only for the full-view comparison; browser chrome and capture compression were excluded from design findings.
+- Cross-browser viewports: Chrome 1440 × 900, Edge 1920 × 1080, and Chrome 1459 × 861 at device scale 1.5.
+- States: initial/resting gallery, pointer moving without a button press, pointer stopped for 500 ms, active drag, released inertia, and depth recession.
+- Scope: desktop Projects gallery and pointer/wheel interaction. Mobile, project detail routes, sound, menu behavior, and production filter logic remain intentionally out of scope.
 
 ## Findings and comparison history
 
-1. **P1 — old top behavior formed a flat stack.** The earlier orthographic/pinned implementation compressed cards beneath the heading without true distance. It was replaced with a 35-degree perspective camera, negative-Z travel, X-axis tilt, depth-dependent scale, and a continuing vanishing path.
-2. **P1 — the first perspective pass crossed the title and narrowed too much.** The receding row was over 100 px tall and converged toward the center. The full-depth pose now reaches 1600 world units, tilts 1.18 radians, preserves most horizontal span, and settles as a thin band below the heading.
-3. **P2 — an approaching row stayed visually heavy.** Recession previously began after the card had already entered the title region. The transition now begins at a 420 px card center and reaches full depth at 225 px, so the card folds backward before it can cover the heading.
-4. **P2 — old rows left hairline text across the title.** Media and metadata now fade only after continuing well beyond the visible depth band. The row remains visibly curled first, then disappears in the far distance.
-5. **P2 — background and imagery were too gray/dark.** The backdrop is now warm-white with low-opacity, moving edge sculpture; the central top torus was removed, the side arches were narrowed, and the image shader gained a restrained white wash.
-6. **P2 — no-input motion was too difficult to see.** Ambient vertex displacement and UV refraction were strengthened and given a subtle persistent chromatic split. The two-frame difference image shows motion along card edges and inside the imagery without pointer input.
-7. **P2 — pointer travel was slower than the recording.** Drag distance now maps at 2× pointer displacement while release momentum remains bounded, which brings the next foreground row into view at the same interaction scale as the supplied recording.
-8. Post-fix visual comparison shows the source and implementation share the required hierarchy, two-column proportions, card order, pale atmosphere, visible rest ripple, curved active drag, thin receding band, and clear protected heading.
-9. **P1 — pointer movement previously had no spatially local response.** Viewport-normalized pointer position, velocity, drag energy, and decay are now tracked independently of gallery scroll. Every media plane receives the same field, so the effect follows the cursor continuously across cards.
-10. **P1 — the first light pass formed an opaque white orb.** Side-by-side inspection against the 10:49 recording showed that broad whitening hid the image. The final pass uses a small glint, travelling ring highlights, texture refraction, and a restrained chromatic rim, preserving image detail while making the water response clearly visible.
-11. **P2 — drag bending was too uniformly arched.** The large symmetric velocity bow was reduced from 28 to 12 world units. Phase-offset diagonal, edge-lag, twist, and delayed drag waves now create smaller asymmetric membrane motion.
-12. **P2 — depth shrink completed too abruptly and remained too thick.** The easing interval now runs from a 420 px center to 150 px, response smoothing changed from 0.82 to 0.88, full depth increased from 1600 to 2200 world units, and maximum tilt increased from 1.18 to 1.34 radians.
-13. **P2 — too few examples shortened the experience.** Ten neutral, replaceable English studies were added using bundled local imagery. The visible total and automated expectations now report 22 entries without inventing new clients or claims.
-14. **P1 — independent review found card-boundary phase discontinuity.** Pointer rings no longer include each card's ambient `uPhase`, so equal viewport distances share one continuous wave phase across the two-column seam.
-15. **P1 — independent review found a false first-move spike.** Pointer enter/down now initializes coordinates and time, while a first-move sentinel prevents a stationary cursor from being measured against `(0, 0)`. Velocity is normalized by elapsed time for consistent response across mouse polling rates.
+1. **P1 — previous pointer treatment formed fixed concentric rings.** The earlier shader used time-driven radial sine bands, a center glint, ring highlights, and a non-drag hover-strength floor. This remained visible after the pointer stopped and did not match the supplied recording.
+2. **Fix:** The radial sine bands, glint, ring highlight, and pointer-light mix were removed. Pointer entry now records position without activating an effect. Pointer movement alone creates a velocity-oriented local membrane shift, texture smear, and restrained color separation. Non-drag pointer strength has no floor and becomes inactive after stopping.
+3. **P2 — first velocity-only pass was too subtle in a captured frame.** Although the behavior was technically localized and transient, the initial 12-unit membrane lift and 0.008 texture-flow offset were difficult to distinguish from ambient motion at the matched recording scale.
+4. **Fix:** The local field was widened modestly, membrane displacement increased to 22 world units, texture flow to 0.014, and chromatic separation to 0.009. The focused crop now shows directional surface change without a circular outline, white orb, or fixed decorative wave.
+5. **Post-fix pointer evidence:** The source two-frame strip and the local rest/motion strip both show image-surface change between frames rather than a stationary cursor ornament. The local effect remains deliberately cleaner because the source recording contains browser compression, cursor capture, and a partially receded gallery state.
+6. **P1 — earlier top behavior formed a flat stack.** It was replaced in prior iterations with perspective depth, negative-Z travel, X-axis tilt, depth-dependent scale, horizontal compensation, and continuing vanishing-path movement.
+7. **P2 — background and imagery were too gray/dark.** Prior iterations moved the field to warm white, reduced background-sculpture opacity, narrowed the side forms, and added a restrained image wash.
+8. **P2 — drag bending was too uniformly arched and shrink completed too abruptly.** Prior iterations reduced the symmetric velocity bow, introduced phase-offset deformation, widened the recession interval, and increased distance/tilt. Those approved behaviors are unchanged in this pointer-only iteration.
+9. **P2 — too few examples shortened the experience.** The framework retains twenty-two replaceable English examples using local bundled imagery.
+
+No actionable P0, P1, or P2 issue remains in the approved scope after the velocity-amplitude refinement.
 
 ## Required fidelity surfaces
 
-- **Fonts and typography:** Heading hierarchy, navigation size, filter scale, metadata weight, line height, and two-line wrapping are aligned with the captured page. The local font rendering is slightly cleaner than the compressed recording, which is an expected capture difference.
-- **Spacing and layout rhythm:** Two 1024:538 media columns, 42 px gap, 1304 px desktop cap, 58 px metadata row, and fixed title/filter region match the recorded structure. Receding media stays wide rather than collapsing into a centered pile.
-- **Colors and visual tokens:** The page uses a luminous warm-white field, subtle grain, translucent pale arches, black active filter, and softened image grade. The result no longer reads as flat gray or dark.
-- **Image quality and asset fidelity:** Project imagery uses local copies with cover cropping, continuous refraction, rounded clipping, and subtle RGB fringe. No source assets are hotlinked.
-- **Copy and content:** The captured English title, filters, counts, project names, project categories, brand, and navigation are preserved for this framework stage, ready for later replacement with the user's projects.
+- **Fonts and typography:** Heading, navigation, filter, count, metadata weight, line height, and wrapping remain unchanged from the previously approved pass. The local render is cleaner than the compressed source recording; no new typography drift was introduced.
+- **Spacing and layout rhythm:** Two media columns, 42 px gutter, 1304 px cap, metadata spacing, protected heading region, and depth path remain unchanged. Browser-chrome differences were excluded from comparison.
+- **Colors and visual tokens:** Warm-white background, translucent pale sculpture, black active filter, softened imagery, and subtle chromatic edges remain. The removed pointer implementation no longer adds a white orb or bright circular bands.
+- **Image quality and asset fidelity:** Images are local, cover-cropped, shader-rendered, and free of hotlinks. Pointer movement now deforms the image surface while a stationary cursor contributes exactly zero shader displacement/light.
+- **Copy and content:** Captured English title, filters, counts, navigation, and project metadata remain as framework content for later replacement with the user's portfolio.
+- **Icons:** Existing brand, menu, project-arrow, and corner controls retain their earlier size/alignment. No icon was introduced or replaced in this iteration.
+- **Accessibility and viewport resilience:** Pointer motion is decorative and does not gate navigation. Desktop Chrome/Edge layouts did not overlap or clip at the tested widths. Mobile remains outside the user-approved scope.
 
 ## Interaction and browser checks
 
-- Chrome 1440 × 900: 22 cards rendered; wheel, hover pointer ripple, pointer down/drag/up, bounded inertia, depth recession, far-depth fade, and protected heading verified.
-- Edge 1920 × 1080: the same interaction suite passed at the wider viewport.
-- Visual capture suite: 12/12 captures passed across Chrome, Edge, and the matched recording viewport.
-- Standard browser suite: 9 passed; 12 opt-in visual capture cases skipped as designed.
-- Unit/component suite: 27 passed across 5 files.
-- Lint, TypeScript, and production build: passed.
-- Console: no application errors observed. The upstream Three.js clock deprecation warning remains non-blocking.
+- Pointer movement activates `data-pointer-active`; after 500 ms without movement it returns to `false`.
+- Chrome and Edge: wheel, pointer move, pointer down/drag/up, bounded inertia, depth recession, and protected heading all passed.
+- Standard browser suite: 9/9 passed across Chrome 1440, Edge 1080p, and the matched Chrome recording viewport.
+- Visual capture suite: 12/12 passed across the same three projects.
+- Unit/component suite: 28/28 passed across 5 files.
+- Lint and production build: passed.
+- Console: no application error was observed. The upstream Three.js `Clock` deprecation warning remains non-blocking.
 
 ## Follow-up polish
 
-- P3: the exact private background geometry and proprietary deformation shader are unavailable. The current locally built sculpture and shader reproduce the visible composition and interaction language, but they are not the source implementation.
+- P3: Static screenshots cannot fully convey the short-lived directional deformation; final acceptance should include the user's live mouse check in Chrome or Edge.
+- P3: The source's private shader and exact background geometry are unavailable. The local implementation reproduces the visible interaction language without claiming identical source code.
 
 final result: passed

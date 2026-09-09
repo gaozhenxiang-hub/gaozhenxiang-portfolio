@@ -39,6 +39,11 @@ export function normalizePointerVelocity(deltaPx: number, elapsedMs: number) {
   return Math.max(-1, Math.min(1, perReferenceFrame / 34));
 }
 
+export function calculatePointerImpulse(speed: number, dragging: boolean) {
+  const movement = Math.max(0, speed) * 1.15;
+  return Math.min(1, movement + (dragging ? 0.28 : 0));
+}
+
 export function calculateDepthRecession(screenY: number) {
   const startY = 420;
   const fullDepthY = 150;
@@ -120,10 +125,10 @@ export function createPointerInteractionFrame(
 ): PointerInteractionState {
   const normalizedDelta = Math.min(Math.max(deltaMs / 16.667, 0), 2);
   const positionFollow = 1 - Math.pow(0.58, normalizedDelta);
-  const strengthBase = state.targetStrength > state.strength ? 0.55 : 0.9;
+  const strengthBase = state.targetStrength > state.strength ? 0.55 : 0.78;
   const strengthFollow = 1 - Math.pow(strengthBase, normalizedDelta);
   const strength = state.strength + (state.targetStrength - state.strength) * strengthFollow;
-  const velocityDecay = Math.pow(0.82, normalizedDelta);
+  const velocityDecay = Math.pow(0.72, normalizedDelta);
 
   return {
     ...state,

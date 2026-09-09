@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import {
   calculateMetadataDepthLayout,
+  calculatePointerImpulse,
   clampPosition,
   createMotionFrame,
   createPointerInteractionFrame,
@@ -40,7 +41,6 @@ export function useDragGallery() {
     let previousPointerY = 0;
     let previousPointerTime = 0;
     let pointerVelocity = 0;
-    let pointerInside = false;
     let previousPointerX = 0;
     let previousInteractionY = 0;
     let previousInteractionTime = 0;
@@ -100,20 +100,17 @@ export function useDragGallery() {
       updatePointerTarget(event);
       if (!hasPreviousInteraction) {
         rememberPointer(event);
-        pointerInside = true;
-        pointerRef.current.targetStrength = Math.max(pointerRef.current.targetStrength, 0.16);
         return;
       }
       const elapsedInteraction = Math.max(event.timeStamp - previousInteractionTime, 8);
       const deltaX = event.clientX - previousPointerX;
       const deltaY = event.clientY - previousInteractionY;
       const speed = Math.hypot(deltaX, deltaY) / elapsedInteraction;
-      pointerInside = true;
       pointerRef.current.velocityX = normalizePointerVelocity(deltaX, elapsedInteraction);
       pointerRef.current.velocityY = normalizePointerVelocity(-deltaY, elapsedInteraction);
       pointerRef.current.targetStrength = Math.max(
         pointerRef.current.targetStrength,
-        Math.min(1, 0.38 + speed * 0.34 + (dragging ? 0.34 : 0)),
+        calculatePointerImpulse(speed, dragging),
       );
       previousPointerX = event.clientX;
       previousInteractionY = event.clientY;
@@ -142,14 +139,12 @@ export function useDragGallery() {
     };
 
     const onPointerEnter = (event: PointerEvent) => {
-      pointerInside = true;
       updatePointerTarget(event);
       rememberPointer(event);
     };
 
     const onPointerLeave = () => {
       if (dragging) return;
-      pointerInside = false;
       pointerRef.current.targetStrength = 0;
     };
 
@@ -160,10 +155,10 @@ export function useDragGallery() {
       lastFrame = now;
       motionRef.current = createMotionFrame(motionRef.current, delta);
       const normalizedDelta = Math.min(Math.max(delta / 16.667, 0), 2);
-      const pointerFloor = dragging ? 0.58 : pointerInside ? 0.06 : 0;
+      const pointerFloor = dragging ? 0.42 : 0;
       pointerRef.current.targetStrength = Math.max(
         pointerFloor,
-        pointerRef.current.targetStrength * Math.pow(dragging ? 0.96 : 0.86, normalizedDelta),
+        pointerRef.current.targetStrength * Math.pow(dragging ? 0.96 : 0.72, normalizedDelta),
       );
       pointerRef.current = createPointerInteractionFrame(pointerRef.current, delta);
       const visuals = mapVelocityToVisuals(motionRef.current.velocity);

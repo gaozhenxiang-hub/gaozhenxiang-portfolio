@@ -34,15 +34,17 @@ describe("gallery shaders", () => {
     expect(galleryFragmentShader).toContain("0.0008 + min(abs(uVelocity), 1.0) * 0.005");
   });
 
-  it("adds a viewport-local liquid light, refraction rings, and membrane lift", () => {
+  it("uses pointer velocity for a transient local image response", () => {
     expect(galleryVertexShader).toContain("uniform vec2 uPointerViewport");
     expect(galleryVertexShader).toContain("uniform float uPointerStrength");
-    expect(galleryVertexShader).toContain("pointerMembrane");
+    expect(galleryVertexShader).toContain("pointerImpulse");
     expect(galleryFragmentShader).toContain("uniform vec2 uPointerViewport");
-    expect(galleryFragmentShader).toContain("liquidRipple");
+    expect(galleryFragmentShader).toContain("pointerFlow");
     expect(galleryFragmentShader).toContain("pointerChromatic");
-    expect(galleryFragmentShader).toContain("pointerLight");
-    expect(galleryFragmentShader).toContain("pointerGlint");
+    expect(galleryFragmentShader).toContain("splitOffset");
+    expect(galleryVertexShader).toContain("pointerImpulse * 22.0");
+    expect(galleryFragmentShader).toContain("pointerFlow * 0.014");
+    expect(galleryFragmentShader).toContain("pointerImpulse * 0.009");
   });
 
   it("uses layered phase-offset waves instead of one symmetric bow", () => {
@@ -51,15 +53,14 @@ describe("gallery shaders", () => {
     expect(galleryVertexShader).toContain("twistWave");
   });
 
-  it("keeps pointer rings continuous across cards instead of phase shifting per project", () => {
-    expect(galleryVertexShader).toContain(
-      "sin(pointerDistance * 58.0 - uTime * 8.4)",
-    );
-    expect(galleryFragmentShader).toContain(
-      "sin(pointerDistance * 66.0 - uTime * 9.0)",
-    );
-    expect(galleryFragmentShader).toContain(
-      "sin(pointerDistance * 42.0 - uTime * 6.2)",
-    );
+  it("contains no fixed pointer rings, glint, or radial ripple light", () => {
+    const pointerShaders = `${galleryVertexShader}\n${galleryFragmentShader}`;
+    expect(pointerShaders).not.toContain("pointerRing");
+    expect(pointerShaders).not.toContain("ringA");
+    expect(pointerShaders).not.toContain("ringB");
+    expect(pointerShaders).not.toContain("liquidRipple");
+    expect(pointerShaders).not.toContain("pointerGlint");
+    expect(pointerShaders).not.toContain("ringHighlight");
+    expect(pointerShaders).not.toMatch(/sin\(pointerDistance/);
   });
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  calculatePointerImpulse,
   calculateDepthRecession,
   calculateDepthTransform,
   calculateDepthVisibility,
@@ -65,6 +66,16 @@ describe("gallery motion", () => {
     expect(normalizePointerVelocity(-34, 16.667)).toBeCloseTo(-1, 3);
   });
 
+  it("creates pointer energy only from movement or an active drag", () => {
+    expect(calculatePointerImpulse(0, false)).toBe(0);
+    expect(calculatePointerImpulse(0.2, false)).toBeGreaterThan(0);
+    expect(calculatePointerImpulse(0.8, false)).toBeGreaterThan(
+      calculatePointerImpulse(0.2, false),
+    );
+    expect(calculatePointerImpulse(1.5, false)).toBeLessThanOrEqual(1);
+    expect(calculatePointerImpulse(0, true)).toBeGreaterThan(0);
+  });
+
   it("moves and scales metadata with the receding media plane", () => {
     const front = calculateMetadataDepthLayout(430, 300, 1400, 350, 1440);
     const receding = calculateMetadataDepthLayout(225, 300, 1400, 350, 1440);
@@ -100,7 +111,7 @@ describe("gallery motion", () => {
     expect(distant.screenY).toBeLessThan(horizon.screenY);
   });
 
-  it("lets pointer energy follow quickly and decay as a soft wake", () => {
+  it("lets pointer energy follow quickly and become visually inactive after stopping", () => {
     const activated = createPointerInteractionFrame(
       {
         x: 0.2,
@@ -118,11 +129,11 @@ describe("gallery motion", () => {
     expect(activated.strength).toBeGreaterThan(0.35);
 
     let decaying = { ...activated, targetStrength: 0 };
-    for (let index = 0; index < 45; index += 1) {
+    for (let index = 0; index < 20; index += 1) {
       decaying = createPointerInteractionFrame(decaying, 16.667);
     }
     expect(decaying.strength).toBeGreaterThan(0);
-    expect(decaying.strength).toBeLessThan(0.03);
+    expect(decaying.strength).toBeLessThan(0.025);
   });
 
   it("fades a row only after it has travelled beyond the visible depth band", () => {

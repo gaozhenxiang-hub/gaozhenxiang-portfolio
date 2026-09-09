@@ -33,13 +33,12 @@ export const galleryVertexShader = /* glsl */ `
     vec2 pointerDelta = previewScreen - uPointerViewport;
     pointerDelta.x *= uViewportAspect;
     float pointerDistance = length(pointerDelta);
-    float pointerCore = exp(-pointerDistance * 10.5);
-    float pointerRing = sin(pointerDistance * 58.0 - uTime * 8.4)
-      * exp(-pointerDistance * 11.5);
-    float pointerMembrane = (pointerCore * 0.72 + pointerRing * 0.42) * uPointerStrength;
-    transformed.z += pointerMembrane * 18.0;
-    transformed.y += pointerMembrane * 3.2 + uPointerVelocity.y * pointerCore * uPointerStrength * 4.5;
-    transformed.x += uPointerVelocity.x * pointerCore * uPointerStrength * 5.5;
+    float pointerCore = exp(-pointerDistance * 8.5);
+    float pointerSpeed = length(uPointerVelocity);
+    float pointerImpulse = pointerCore * uPointerStrength * min(1.0, pointerSpeed * 2.4);
+    transformed.z += pointerImpulse * 22.0;
+    transformed.y += uPointerVelocity.y * pointerImpulse * 12.0;
+    transformed.x += uPointerVelocity.x * pointerImpulse * 14.0;
     vec4 clipPosition = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
     vScreenUv = clipPosition.xy / max(clipPosition.w, 0.0001) * 0.5 + 0.5;
     gl_Position = clipPosition;
@@ -80,34 +79,26 @@ export const galleryFragmentShader = /* glsl */ `
     vec2 pointerDelta = vScreenUv - uPointerViewport;
     pointerDelta.x *= uViewportAspect;
     float pointerDistance = length(pointerDelta);
-    vec2 pointerDirection = pointerDelta / max(pointerDistance, 0.001);
-    float pointerFalloff = exp(-pointerDistance * 10.5);
-    float ringA = sin(pointerDistance * 66.0 - uTime * 9.0);
-    float ringB = sin(pointerDistance * 42.0 - uTime * 6.2);
-    float liquidRipple = (ringA * 0.68 + ringB * 0.32) * pointerFalloff * uPointerStrength;
-    uv += pointerDirection * liquidRipple * 0.012;
-    uv += uPointerVelocity * pointerFalloff * uPointerStrength * 0.0022;
+    float pointerFalloff = exp(-pointerDistance * 8.5);
+    float pointerSpeed = length(uPointerVelocity);
+    float pointerImpulse = pointerFalloff * uPointerStrength * min(1.0, pointerSpeed * 2.4);
+    vec2 pointerFlow = uPointerVelocity * pointerImpulse;
+    uv -= pointerFlow * 0.014;
     float idleRefraction = (
       sin(uv.y * 18.0 + uTime * 0.58 + uPhase) +
       sin(uv.x * 13.0 - uTime * 0.42 + uPhase * 1.4)
     ) * 0.0022;
     uv = clamp(uv + vec2(idleRefraction, idleRefraction * 0.55), 0.001, 0.999);
-    float pointerChromatic = pointerFalloff * uPointerStrength * 0.011;
-    float shift = 0.0008 + min(abs(uVelocity), 1.0) * 0.005 + pointerChromatic;
+    float pointerChromatic = pointerImpulse * 0.009;
+    float shift = 0.0008 + min(abs(uVelocity), 1.0) * 0.005;
     float direction = uVelocity < 0.0 ? -1.0 : 1.0;
-    float red = texture2D(uTexture, uv + vec2(shift * direction, 0.0)).r;
+    vec2 pointerDirection = uPointerVelocity / max(pointerSpeed, 0.001);
+    vec2 splitOffset = vec2(shift * direction, 0.0) + pointerDirection * pointerChromatic;
+    float red = texture2D(uTexture, uv + splitOffset).r;
     float green = texture2D(uTexture, uv).g;
-    float blue = texture2D(uTexture, uv - vec2(shift * direction, 0.0)).b;
+    float blue = texture2D(uTexture, uv - splitOffset).b;
     vec3 splitColor = vec3(red, green, blue);
     vec3 gradedColor = mix(splitColor, vec3(1.0), 0.12);
-    float pointerGlint = exp(-pointerDistance * pointerDistance * 2200.0) * uPointerStrength;
-    float ringHighlight = pow(max(ringA, 0.0), 6.0) * pointerFalloff * uPointerStrength;
-    float pointerLight = pointerFalloff * 0.045 * uPointerStrength
-      + abs(liquidRipple) * 0.1
-      + ringHighlight * 0.52
-      + pointerGlint * 0.34;
-    gradedColor = mix(gradedColor, vec3(0.97, 1.0, 1.0), clamp(pointerLight, 0.0, 0.48));
-    gradedColor += vec3(0.025, 0.075, 0.095) * abs(liquidRipple);
     float alpha = roundedBox(vUv, 0.018);
     if (alpha < 0.01) discard;
     gl_FragColor = vec4(gradedColor, alpha * uDistanceAlpha);
