@@ -4,13 +4,13 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "YOUR NAME — Visual Creator",
-  description: "An immersive visual portfolio.",
+  title: "Selected Projects",
+  description: "A draggable visual projects gallery.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body>{children}</body>
     </html>
   );

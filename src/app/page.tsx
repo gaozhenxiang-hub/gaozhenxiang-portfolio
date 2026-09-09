@@ -1,10 +1,5 @@
-import { siteContent } from "@/content/site";
+import { GalleryPage } from "@/features/gallery/GalleryPage";
 
 export default function Home() {
-  return (
-    <main>
-      <h1>{siteContent.name}</h1>
-      <p>{siteContent.tagline}</p>
-    </main>
-  );
+  return <GalleryPage />;
 }
