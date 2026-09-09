@@ -22,6 +22,8 @@ type ProjectPlaneProps = {
   baseY: number;
   width: number;
   height: number;
+  viewportHeight: number;
+  pixelRatio: number;
   motionRef: MotionRef;
 };
 
@@ -31,6 +33,8 @@ export function ProjectPlane({
   baseY,
   width,
   height,
+  viewportHeight,
+  pixelRatio,
   motionRef,
 }: ProjectPlaneProps) {
   const meshRef = useRef<Mesh>(null);
@@ -55,13 +59,15 @@ export function ProjectPlane({
       uVelocity: { value: 0 },
       uImageAspect: { value: imageAspect },
       uPlaneAspect: { value: width / height },
+      uViewportHeight: { value: viewportHeight },
+      uPixelRatio: { value: pixelRatio },
     }),
-    [displayTexture, height, imageAspect, width],
+    [displayTexture, height, imageAspect, pixelRatio, viewportHeight, width],
   );
 
   useFrame(() => {
     if (!meshRef.current || !materialRef.current) return;
-    const velocity = Math.max(-1, Math.min(1, motionRef.current.velocity / 16));
+    const velocity = Math.max(-1, Math.min(1, motionRef.current.velocity / 11));
     meshRef.current.position.y = baseY + motionRef.current.current;
     meshRef.current.rotation.z = velocity * 0.0035;
     materialRef.current.uniforms.uVelocity.value = velocity;

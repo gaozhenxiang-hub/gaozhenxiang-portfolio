@@ -47,3 +47,22 @@ test("gallery starts at the captured desktop composition", async ({ page }) => {
   expect(cardBox?.y).toBeGreaterThanOrEqual(250);
   expect(cardBox?.y).toBeLessThanOrEqual(295);
 });
+
+test("moving cards wash out beneath the protected title area", async ({ page }) => {
+  await page.goto("/");
+
+  const veil = page.getByTestId("gallery-top-veil");
+  await expect(veil).toBeVisible();
+  const veilStyle = await veil.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      backgroundImage: style.backgroundImage,
+      height: element.getBoundingClientRect().height,
+      zIndex: Number(style.zIndex),
+    };
+  });
+
+  expect(veilStyle.backgroundImage).toContain("linear-gradient");
+  expect(veilStyle.height).toBeGreaterThanOrEqual(235);
+  expect(veilStyle.zIndex).toBeGreaterThan(1);
+});

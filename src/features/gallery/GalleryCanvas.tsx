@@ -13,9 +13,9 @@ type MotionRef = { current: MotionState };
 function SoftSculptureMaterial() {
   return (
     <meshBasicMaterial
-      color="#d8dad6"
+      color="#ffffff"
       transparent
-      opacity={0.62}
+      opacity={0.76}
       depthWrite={false}
     />
   );
@@ -70,7 +70,7 @@ function BackgroundSculpture({ motionRef }: { motionRef: MotionRef }) {
 }
 
 function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
-  const { size } = useThree();
+  const { gl, size } = useThree();
   const didSignalReady = useRef(false);
   const gridWidth = Math.min(size.width - 140, 1304);
   const gap = 42;
@@ -103,6 +103,8 @@ function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
             baseY={baseY}
             width={cardWidth}
             height={cardHeight}
+            viewportHeight={size.height}
+            pixelRatio={gl.getPixelRatio()}
             motionRef={motionRef}
           />
         );

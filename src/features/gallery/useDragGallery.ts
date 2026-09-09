@@ -6,6 +6,7 @@ import {
   clampPosition,
   createMotionFrame,
   mapVelocityToVisuals,
+  projectReleaseTarget,
   type MotionState,
 } from "./gallery-motion";
 
@@ -22,6 +23,8 @@ export function useDragGallery() {
     let dragging = false;
     let activePointer: number | null = null;
     let previousPointerY = 0;
+    let previousPointerTime = 0;
+    let pointerVelocity = 0;
 
     const getMaximum = () => {
       const grid = stage.querySelector<HTMLElement>(".gallery-grid--metadata");
@@ -43,6 +46,8 @@ export function useDragGallery() {
       dragging = true;
       activePointer = event.pointerId;
       previousPointerY = event.clientY;
+      previousPointerTime = event.timeStamp;
+      pointerVelocity = 0;
       stage.dataset.dragging = "true";
       stage.setPointerCapture(event.pointerId);
       event.preventDefault();
@@ -51,16 +56,23 @@ export function useDragGallery() {
     const onPointerMove = (event: PointerEvent) => {
       if (!dragging || event.pointerId !== activePointer) return;
       const delta = event.clientY - previousPointerY;
+      const elapsed = Math.max(event.timeStamp - previousPointerTime, 8);
       previousPointerY = event.clientY;
-      setTarget(motionRef.current.target - delta * 1.38);
+      previousPointerTime = event.timeStamp;
+      const galleryDelta = -delta * 1.38;
+      const instantaneousVelocity = galleryDelta / elapsed;
+      pointerVelocity = pointerVelocity * 0.38 + instantaneousVelocity * 0.62;
+      setTarget(motionRef.current.target + galleryDelta);
       event.preventDefault();
     };
 
     const stopDragging = (event: PointerEvent) => {
       if (event.pointerId !== activePointer) return;
       if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId);
+      setTarget(projectReleaseTarget(motionRef.current.target, pointerVelocity, getMaximum()));
       dragging = false;
       activePointer = null;
+      pointerVelocity = 0;
       stage.dataset.dragging = "false";
     };
 

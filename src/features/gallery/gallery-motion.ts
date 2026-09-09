@@ -14,6 +14,11 @@ export function clampPosition(value: number, max: number) {
   return Math.min(Math.max(value, 0), Math.max(max, 0));
 }
 
+export function projectReleaseTarget(target: number, velocity: number, max: number) {
+  const projectedDistance = Math.max(-460, Math.min(460, velocity * 240));
+  return clampPosition(target + projectedDistance, max);
+}
+
 export function createMotionFrame(state: MotionState, deltaMs: number): MotionState {
   const normalizedDelta = Math.min(Math.max(deltaMs / 16.667, 0), 2);
   const distance = state.target - state.current;
@@ -26,7 +31,7 @@ export function createMotionFrame(state: MotionState, deltaMs: number): MotionSt
 }
 
 export function mapVelocityToVisuals(velocity: number): GalleryVisuals {
-  const normalized = Math.max(-1, Math.min(1, velocity / 16));
+  const normalized = Math.max(-1, Math.min(1, velocity / 11));
   const strength = Math.abs(normalized);
 
   return {

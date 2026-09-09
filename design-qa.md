@@ -3,6 +3,8 @@
 ## Comparison setup
 
 - Source truth: `C:\Users\g3320\AppData\Local\Packages\Microsoft.ScreenSketch_8wekyb3d8bbwe\TempState\Recordings\20260909-0615-53.7727585.mp4`
+- Drag reference: `C:\Users\g3320\AppData\Local\Packages\Microsoft.ScreenSketch_8wekyb3d8bbwe\TempState\Recordings\20260909-0750-29.1696819.mp4`
+- Previous implementation recording: `C:\Users\g3320\AppData\Local\Packages\Microsoft.ScreenSketch_8wekyb3d8bbwe\TempState\Recordings\20260909-0751-17.2749447.mp4`
 - Source frame: `output/reference/unseen-recording-frame.png`
 - Implementation capture: `output/qa/gallery-chrome-recording-reference.png`
 - Combined comparison: `output/qa/comparison-final.png`
@@ -17,14 +19,18 @@
 3. Pass 2 found P2 atmosphere drift: the flat background lost the source's pale sculptural edge forms.
 4. Added a low-contrast WebGL background sculpture and small debris, then reduced its contrast and moved it to the frame edges so it does not compete with the work.
 5. Final combined comparison verified title hierarchy, filter position, two-column composition, 1024:538 media ratio, metadata rows, image crop, grain, pale palette and card order.
+6. User-recorded motion comparison found that the previous bend settled too quickly, release momentum could jump too far, cards remained visually heavy under the title, and the overall image grade was darker than the source.
+7. Increased but bounded the velocity deformation, added a capped release projection, lightened the texture grade, and added a screen-space card fade plus matching metadata mask through the protected title/filter area.
+8. A held-drag capture was compared against the source recording and the peak bend was reduced from the first revision to match the source's restrained curved-card profile while retaining a clearly visible response.
 
 ## Interaction and browser checks
 
-- Chrome 1440 × 900: 12 cards rendered; wheel, pointer down/drag/up and inertia passed.
-- Edge 1920 × 1080: 12 cards rendered; wheel, pointer down/drag/up and inertia passed.
+- Chrome 1440 × 900: 12 cards rendered; wheel, pointer down/drag/up, bounded inertia and protected title area passed.
+- Edge 1920 × 1080: 12 cards rendered; wheel, pointer down/drag/up, bounded inertia and protected title area passed.
 - Manual Chrome drag: velocity bending and RGB edge split visibly activate and settle after release.
 - Console: no application errors. One upstream Three.js deprecation warning (`THREE.Clock`) is emitted by the rendering stack and does not affect behavior.
-- Unit/component tests: 11 passed.
+- Unit/component tests: 15 passed.
+- Browser tests: 6 passed across Chrome and Edge; 4 opt-in visual captures skipped in the standard run.
 - Production build: passed.
 
 ## Residual observation

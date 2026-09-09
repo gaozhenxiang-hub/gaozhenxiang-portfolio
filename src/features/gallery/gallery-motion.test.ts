@@ -4,6 +4,7 @@ import {
   clampPosition,
   createMotionFrame,
   mapVelocityToVisuals,
+  projectReleaseTarget,
 } from "./gallery-motion";
 
 describe("gallery motion", () => {
@@ -36,5 +37,12 @@ describe("gallery motion", () => {
       stretch: 1.035,
     });
     expect(mapVelocityToVisuals(-1000).skew).toBe(-1);
+  });
+
+  it("projects bounded momentum in the release direction", () => {
+    expect(projectReleaseTarget(400, 20, 1000)).toBeGreaterThan(400);
+    expect(projectReleaseTarget(400, -20, 1000)).toBeLessThan(400);
+    expect(projectReleaseTarget(980, 20, 1000)).toBe(1000);
+    expect(projectReleaseTarget(580, 360, 5000)).toBeLessThanOrEqual(1040);
   });
 });

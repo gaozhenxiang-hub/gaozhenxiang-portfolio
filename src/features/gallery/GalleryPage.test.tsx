@@ -23,6 +23,8 @@ describe("GalleryPage", () => {
     expect(screen.getAllByTestId("project-card")).toHaveLength(12);
     expect(screen.getByTestId("gallery-stage")).toHaveAttribute("data-dragging", "false");
     expect(screen.getByTestId("gallery-canvas")).toBeVisible();
+    expect(screen.getByTestId("gallery-top-veil")).toBeVisible();
+    expect(screen.getByTestId("gallery-metadata-mask")).toBeVisible();
   });
 
   it("renders the captured filter labels as non-interactive display controls", () => {

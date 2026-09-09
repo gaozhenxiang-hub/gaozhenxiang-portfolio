@@ -55,23 +55,27 @@ export function GalleryPage() {
 
       <div className="gallery-viewport">
         <GalleryCanvas motionRef={motionRef} />
-        <div className="gallery-grid gallery-grid--metadata">
-          {projects.map((project) => (
-            <article className="project-card" data-testid="project-card" key={project.id}>
-              <div className="project-media project-media--fallback">
-                <img src={project.image} alt="" draggable={false} />
-              </div>
-              <div className="project-meta">
-                <div>
-                  <strong>{project.title}</strong>
-                  <span>{project.description}</span>
+        <div className="gallery-metadata-mask" data-testid="gallery-metadata-mask">
+          <div className="gallery-grid gallery-grid--metadata">
+            {projects.map((project) => (
+              <article className="project-card" data-testid="project-card" key={project.id}>
+                <div className="project-media project-media--fallback">
+                  <img src={project.image} alt="" draggable={false} />
                 </div>
-                <img className="project-arrow" src="/gallery/arrow.svg" alt="" />
-              </div>
-            </article>
-          ))}
+                <div className="project-meta">
+                  <div>
+                    <strong>{project.title}</strong>
+                    <span>{project.description}</span>
+                  </div>
+                  <img className="project-arrow" src="/gallery/arrow.svg" alt="" />
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
+
+      <div className="gallery-top-veil" data-testid="gallery-top-veil" aria-hidden="true" />
 
       <div className="drag-cue" aria-hidden="true">
         <img src="/gallery/drag-arrows.svg" alt="" />
