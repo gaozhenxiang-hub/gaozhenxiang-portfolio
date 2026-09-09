@@ -2,6 +2,10 @@
 .playwright-cli/
 output/reference-analysis/
 output/playwright/
+output/qa/
+output/reference/
+test-results/
+playwright-report/
 node_modules/
 .next/
 dist/

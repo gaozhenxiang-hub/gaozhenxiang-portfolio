@@ -31,11 +31,30 @@
   position: fixed;
   z-index: 0;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(220, 221, 218, 0.82), rgba(248, 248, 244, 0.38) 28%, rgba(248, 248, 244, 0.3) 72%, rgba(218, 220, 216, 0.78)),
-    url("/gallery/gradient-noise.webp") center / cover no-repeat;
-  filter: saturate(0.72) contrast(0.9) brightness(1.14);
+  overflow: hidden;
+  background: #eeefec;
   transform: scale(calc(1 + var(--gallery-bend) * 0.008));
+}
+
+.gallery-atmosphere::before,
+.gallery-atmosphere::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.gallery-atmosphere::before {
+  inset: 0;
+  background: url("/gallery/gradient-noise.webp") center / cover no-repeat;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+}
+
+.gallery-atmosphere::after {
+  inset: -20%;
+  background: url("/gallery/sand-rotate.webp") center / 560px repeat;
+  filter: grayscale(1) blur(18px) contrast(0.55) brightness(1.08);
+  opacity: 0.12;
 }
 
 .gallery-header {
@@ -96,7 +115,7 @@
 
 .gallery-filter h1 {
   margin: 0;
-  font-size: clamp(56px, 4vw, 74px);
+  font-size: 68px;
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: -0.034em;
@@ -146,9 +165,9 @@
   top: 262px;
   left: 50%;
   display: grid;
-  width: min(76.5vw, 1480px);
+  width: min(calc(100vw - 140px), 1304px);
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: max(30px, 2.46vw);
+  column-gap: 42px;
   row-gap: 16px;
   transform: translate3d(-50%, calc(var(--gallery-y) * -1px), 0);
   will-change: transform;

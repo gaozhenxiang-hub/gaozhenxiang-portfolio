@@ -1,0 +1,34 @@
+# Design QA — Unseen Projects core gallery
+
+## Comparison setup
+
+- Source truth: `C:\Users\g3320\AppData\Local\Packages\Microsoft.ScreenSketch_8wekyb3d8bbwe\TempState\Recordings\20260909-0615-53.7727585.mp4`
+- Source frame: `output/reference/unseen-recording-frame.png`
+- Implementation capture: `output/qa/gallery-chrome-recording-reference.png`
+- Combined comparison: `output/qa/comparison-final.png`
+- Browser/viewport: Chrome, 1459 × 861 CSS px at 1.5 device scale; 2188 × 1292 output px
+- State: initial/resting gallery; first four projects visible
+- Scope: desktop Projects gallery and pointer/wheel drag interaction. Mobile, detail pages, menu, sound and production filters are intentionally out of scope.
+
+## QA history
+
+1. Pass 1 found P1 scale drift: the implementation grid was materially too wide and the title was oversized at the recording viewport.
+2. Fixed grid width to the measured 1304 px cap, column gap to 42 px, and title to the measured 68 px size.
+3. Pass 2 found P2 atmosphere drift: the flat background lost the source's pale sculptural edge forms.
+4. Added a low-contrast WebGL background sculpture and small debris, then reduced its contrast and moved it to the frame edges so it does not compete with the work.
+5. Final combined comparison verified title hierarchy, filter position, two-column composition, 1024:538 media ratio, metadata rows, image crop, grain, pale palette and card order.
+
+## Interaction and browser checks
+
+- Chrome 1440 × 900: 12 cards rendered; wheel, pointer down/drag/up and inertia passed.
+- Edge 1920 × 1080: 12 cards rendered; wheel, pointer down/drag/up and inertia passed.
+- Manual Chrome drag: velocity bending and RGB edge split visibly activate and settle after release.
+- Console: no application errors. One upstream Three.js deprecation warning (`THREE.Clock`) is emitted by the rendering stack and does not affect behavior.
+- Unit/component tests: 11 passed.
+- Production build: passed.
+
+## Residual observation
+
+- P3: the pale background sculpture is a measured approximation because the source's private 3D scene geometry is not distributed with the page assets. It preserves the visible composition and does not affect the priority gallery or drag behavior.
+
+final result: passed

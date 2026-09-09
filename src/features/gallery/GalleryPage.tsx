@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- exact local source assets also back the WebGL texture layer */
+
 import { projects } from "@/content/projects";
 import { GalleryCanvas } from "./GalleryCanvas";
 import { useDragGallery } from "./useDragGallery";
