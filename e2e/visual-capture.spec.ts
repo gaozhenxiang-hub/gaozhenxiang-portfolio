@@ -11,6 +11,11 @@ test("capture the desktop gallery for visual comparison", async ({ page }, testI
     path: `output/qa/gallery-${testInfo.project.name}.png`,
     fullPage: false,
   });
+  await page.waitForTimeout(1400);
+  await page.screenshot({
+    path: `output/qa/gallery-rest-later-${testInfo.project.name}.png`,
+    fullPage: false,
+  });
 });
 
 test("capture the active drag deformation", async ({ page }, testInfo) => {
@@ -27,4 +32,17 @@ test("capture the active drag deformation", async ({ page }, testInfo) => {
     fullPage: false,
   });
   await page.mouse.up();
+});
+
+test("capture a project row curled beneath the title", async ({ page }, testInfo) => {
+  test.skip(process.env.CAPTURE_QA !== "1", "Run with CAPTURE_QA=1 for visual QA artifacts.");
+
+  await page.goto("/");
+  await expect(page.getByTestId("gallery-stage")).toHaveClass(/webgl-ready/);
+  await page.mouse.wheel(0, 300);
+  await page.waitForTimeout(650);
+  await page.screenshot({
+    path: `output/qa/gallery-curl-${testInfo.project.name}.png`,
+    fullPage: false,
+  });
 });

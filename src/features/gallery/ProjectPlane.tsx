@@ -11,7 +11,11 @@ import {
 } from "three";
 
 import type { Project } from "@/content/projects";
-import type { MotionState } from "./gallery-motion";
+import {
+  calculateTopCurl,
+  pinCurledScreenPosition,
+  type MotionState,
+} from "./gallery-motion";
 import { galleryFragmentShader, galleryVertexShader } from "./gallery-shaders";
 
 type MotionRef = { current: MotionState };
@@ -23,7 +27,7 @@ type ProjectPlaneProps = {
   width: number;
   height: number;
   viewportHeight: number;
-  pixelRatio: number;
+  phase: number;
   motionRef: MotionRef;
 };
 
@@ -34,7 +38,7 @@ export function ProjectPlane({
   width,
   height,
   viewportHeight,
-  pixelRatio,
+  phase,
   motionRef,
 }: ProjectPlaneProps) {
   const meshRef = useRef<Mesh>(null);
@@ -57,25 +61,30 @@ export function ProjectPlane({
     () => ({
       uTexture: { value: displayTexture },
       uVelocity: { value: 0 },
+      uTime: { value: 0 },
+      uPhase: { value: phase },
+      uCurl: { value: 0 },
       uImageAspect: { value: imageAspect },
       uPlaneAspect: { value: width / height },
-      uViewportHeight: { value: viewportHeight },
-      uPixelRatio: { value: pixelRatio },
     }),
-    [displayTexture, height, imageAspect, pixelRatio, viewportHeight, width],
+    [displayTexture, height, imageAspect, phase, width],
   );
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     if (!meshRef.current || !materialRef.current) return;
     const velocity = Math.max(-1, Math.min(1, motionRef.current.velocity / 11));
-    meshRef.current.position.y = baseY + motionRef.current.current;
+    const rawScreenY = viewportHeight / 2 - (baseY + motionRef.current.current);
+    const visualScreenY = pinCurledScreenPosition(rawScreenY);
+    meshRef.current.position.y = viewportHeight / 2 - visualScreenY;
     meshRef.current.rotation.z = velocity * 0.0035;
     materialRef.current.uniforms.uVelocity.value = velocity;
+    materialRef.current.uniforms.uTime.value = clock.elapsedTime;
+    materialRef.current.uniforms.uCurl.value = calculateTopCurl(rawScreenY);
   });
 
   return (
     <mesh ref={meshRef} position={[x, baseY, 0]} frustumCulled={false}>
-      <planeGeometry args={[width, height, 32, 16]} />
+      <planeGeometry args={[width, height, 48, 24]} />
       <shaderMaterial
         ref={materialRef}
         uniforms={uniforms}

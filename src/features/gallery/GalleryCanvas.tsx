@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
-import type { Group } from "three";
+import { AdditiveBlending, type Group } from "three";
 
 import { projects } from "@/content/projects";
 import type { MotionState } from "./gallery-motion";
@@ -15,8 +15,10 @@ function SoftSculptureMaterial() {
     <meshBasicMaterial
       color="#ffffff"
       transparent
-      opacity={0.76}
+      opacity={0.42}
+      blending={AdditiveBlending}
       depthWrite={false}
+      toneMapped={false}
     />
   );
 }
@@ -25,11 +27,13 @@ function BackgroundSculpture({ motionRef }: { motionRef: MotionRef }) {
   const groupRef = useRef<Group>(null);
   const { size } = useThree();
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     if (!groupRef.current) return;
     const velocity = Math.max(-1, Math.min(1, motionRef.current.velocity / 16));
-    groupRef.current.rotation.z += velocity * 0.0007;
-    groupRef.current.position.y = Math.sin(motionRef.current.current * 0.0015) * 12;
+    const time = clock.elapsedTime;
+    groupRef.current.rotation.z = Math.sin(time * 0.12) * 0.018 + velocity * 0.006;
+    groupRef.current.rotation.x = Math.sin(time * 0.18) * 0.008;
+    groupRef.current.position.y = Math.sin(time * 0.25) * 9 + Math.sin(motionRef.current.current * 0.0015) * 12;
   });
 
   const edgeX = size.width / 2;
@@ -70,7 +74,7 @@ function BackgroundSculpture({ motionRef }: { motionRef: MotionRef }) {
 }
 
 function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
-  const { gl, size } = useThree();
+  const { size } = useThree();
   const didSignalReady = useRef(false);
   const gridWidth = Math.min(size.width - 140, 1304);
   const gap = 42;
@@ -104,7 +108,7 @@ function GalleryScene({ motionRef }: { motionRef: MotionRef }) {
             width={cardWidth}
             height={cardHeight}
             viewportHeight={size.height}
-            pixelRatio={gl.getPixelRatio()}
+            phase={index * 1.37}
             motionRef={motionRef}
           />
         );

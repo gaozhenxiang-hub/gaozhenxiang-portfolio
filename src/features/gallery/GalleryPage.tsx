@@ -55,23 +55,21 @@ export function GalleryPage() {
 
       <div className="gallery-viewport">
         <GalleryCanvas motionRef={motionRef} />
-        <div className="gallery-metadata-mask" data-testid="gallery-metadata-mask">
-          <div className="gallery-grid gallery-grid--metadata">
-            {projects.map((project) => (
-              <article className="project-card" data-testid="project-card" key={project.id}>
-                <div className="project-media project-media--fallback">
-                  <img src={project.image} alt="" draggable={false} />
+        <div className="gallery-grid gallery-grid--metadata">
+          {projects.map((project) => (
+            <article className="project-card" data-testid="project-card" key={project.id}>
+              <div className="project-media project-media--fallback">
+                <img src={project.image} alt="" draggable={false} />
+              </div>
+              <div className="project-meta">
+                <div>
+                  <strong>{project.title}</strong>
+                  <span>{project.description}</span>
                 </div>
-                <div className="project-meta">
-                  <div>
-                    <strong>{project.title}</strong>
-                    <span>{project.description}</span>
-                  </div>
-                  <img className="project-arrow" src="/gallery/arrow.svg" alt="" />
-                </div>
-              </article>
-            ))}
-          </div>
+                <img className="project-arrow" src="/gallery/arrow.svg" alt="" />
+              </div>
+            </article>
+          ))}
         </div>
       </div>
 

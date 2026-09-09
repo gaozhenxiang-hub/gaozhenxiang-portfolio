@@ -19,6 +19,25 @@ export function projectReleaseTarget(target: number, velocity: number, max: numb
   return clampPosition(target + projectedDistance, max);
 }
 
+export function calculateTopCurl(screenY: number) {
+  const fullCurlY = 125;
+  const noCurlY = 300;
+  const progress = Math.min(1, Math.max(0, (noCurlY - screenY) / (noCurlY - fullCurlY)));
+  return progress * progress * (3 - 2 * progress);
+}
+
+export function pinCurledScreenPosition(screenY: number) {
+  const pinY = 140;
+  if (screenY >= pinY) return screenY;
+  return pinY + (screenY - pinY) * 0.16;
+}
+
+export function calculateMetadataCurlShift(screenY: number, mediaHeight: number) {
+  const curl = calculateTopCurl(screenY);
+  const visualCenterY = pinCurledScreenPosition(screenY) + curl * 32;
+  return Math.max(0, screenY - visualCenterY + curl * mediaHeight * 0.43);
+}
+
 export function createMotionFrame(state: MotionState, deltaMs: number): MotionState {
   const normalizedDelta = Math.min(Math.max(deltaMs / 16.667, 0), 2);
   const distance = state.target - state.current;

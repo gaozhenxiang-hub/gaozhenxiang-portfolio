@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  calculateTopCurl,
+  calculateMetadataCurlShift,
   clampPosition,
   createMotionFrame,
   mapVelocityToVisuals,
+  pinCurledScreenPosition,
   projectReleaseTarget,
 } from "./gallery-motion";
 
@@ -44,5 +47,23 @@ describe("gallery motion", () => {
     expect(projectReleaseTarget(400, -20, 1000)).toBeLessThan(400);
     expect(projectReleaseTarget(980, 20, 1000)).toBe(1000);
     expect(projectReleaseTarget(580, 360, 5000)).toBeLessThanOrEqual(1040);
+  });
+
+  it("rolls cards into the top boundary without removing them", () => {
+    expect(calculateTopCurl(320)).toBe(0);
+    expect(calculateTopCurl(110)).toBe(1);
+    expect(calculateTopCurl(215)).toBeGreaterThan(0);
+    expect(calculateTopCurl(215)).toBeLessThan(1);
+  });
+
+  it("holds a fully curled row near the header while allowing it to keep moving", () => {
+    expect(pinCurledScreenPosition(220)).toBe(220);
+    expect(pinCurledScreenPosition(0)).toBeGreaterThan(95);
+    expect(pinCurledScreenPosition(-1000)).toBeLessThan(0);
+  });
+
+  it("pulls metadata toward the compressed image height", () => {
+    expect(calculateMetadataCurlShift(320, 300)).toBe(0);
+    expect(calculateMetadataCurlShift(110, 300)).toBeCloseTo(71.8, 4);
   });
 });

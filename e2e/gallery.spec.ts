@@ -48,9 +48,10 @@ test("gallery starts at the captured desktop composition", async ({ page }) => {
   expect(cardBox?.y).toBeLessThanOrEqual(295);
 });
 
-test("moving cards wash out beneath the protected title area", async ({ page }) => {
+test("curled cards remain rendered beneath the protected title area", async ({ page }) => {
   await page.goto("/");
 
+  await expect(page.getByTestId("gallery-metadata-mask")).toHaveCount(0);
   const veil = page.getByTestId("gallery-top-veil");
   await expect(veil).toBeVisible();
   const veilStyle = await veil.evaluate((element) => {
@@ -62,7 +63,8 @@ test("moving cards wash out beneath the protected title area", async ({ page }) 
     };
   });
 
-  expect(veilStyle.backgroundImage).toContain("linear-gradient");
-  expect(veilStyle.height).toBeGreaterThanOrEqual(235);
+  expect(veilStyle.backgroundImage).toContain("radial-gradient");
+  expect(veilStyle.height).toBeGreaterThanOrEqual(180);
+  expect(veilStyle.height).toBeLessThanOrEqual(240);
   expect(veilStyle.zIndex).toBeGreaterThan(1);
 });

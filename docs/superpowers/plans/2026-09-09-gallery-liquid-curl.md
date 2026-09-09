@@ -8,6 +8,8 @@
 
 **Tech Stack:** Next.js 16, React 19, React Three Fiber, Three.js GLSL shaders, Vitest, Playwright
 
+**Status:** Implemented and verified on 2026-09-09.
+
 ---
 
 ### Task 1: Define the top-curl motion contract

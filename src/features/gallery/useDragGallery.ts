@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 
 import {
+  calculateMetadataCurlShift,
   clampPosition,
   createMotionFrame,
   mapVelocityToVisuals,
@@ -25,6 +26,7 @@ export function useDragGallery() {
     let previousPointerY = 0;
     let previousPointerTime = 0;
     let pointerVelocity = 0;
+    const cards = Array.from(stage.querySelectorAll<HTMLElement>(".project-card"));
 
     const getMaximum = () => {
       const grid = stage.querySelector<HTMLElement>(".gallery-grid--metadata");
@@ -87,6 +89,16 @@ export function useDragGallery() {
       stage.style.setProperty("--gallery-bend", visuals.bend.toFixed(4));
       stage.style.setProperty("--gallery-skew", visuals.skew.toFixed(4));
       stage.style.setProperty("--gallery-stretch", visuals.stretch.toFixed(4));
+      const grid = stage.querySelector<HTMLElement>(".gallery-grid--metadata");
+      if (grid) {
+        cards.forEach((card) => {
+          const media = card.querySelector<HTMLElement>(".project-media");
+          if (!media) return;
+          const centerY = grid.offsetTop + card.offsetTop + media.offsetHeight / 2 - motionRef.current.current;
+          const shift = calculateMetadataCurlShift(centerY, media.offsetHeight);
+          card.style.setProperty("--meta-curl-shift", shift.toFixed(3));
+        });
+      }
       animationFrame = requestAnimationFrame(tick);
     };
 
