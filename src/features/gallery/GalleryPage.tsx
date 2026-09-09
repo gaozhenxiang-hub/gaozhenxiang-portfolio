@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element -- exact local source assets also back the WebGL texture layer */
 
 import { projects } from "@/content/projects";
+import { ContactFinale } from "@/features/contact/ContactFinale";
 import { GalleryCanvas } from "./GalleryCanvas";
 import { useDragGallery } from "./useDragGallery";
 
@@ -71,6 +72,7 @@ export function GalleryPage() {
               </div>
             </article>
           ))}
+          <ContactFinale />
         </div>
       </div>
 

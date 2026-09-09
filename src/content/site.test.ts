@@ -3,15 +3,13 @@ import { describe, expect, it } from "vitest";
 import { siteContent } from "./site";
 
 describe("siteContent", () => {
-  it("uses an explicit placeholder name", () => {
-    expect(siteContent.name).toBe("YOUR NAME");
+  it("uses the approved personal identity", () => {
+    expect(siteContent.name).toBe("高振翔");
+    expect(siteContent.tagline).toBe("AIGC CREATOR");
   });
 
-  it("describes the intended visual creator role", () => {
-    expect(siteContent.tagline).toContain("Visual Creator");
-  });
-
-  it("does not invent an email address", () => {
-    expect(siteContent.email).toBeNull();
+  it("uses the approved contact details", () => {
+    expect(siteContent.phone).toBe("13293941800");
+    expect(siteContent.email).toBe("13293941800@163.com");
   });
 });

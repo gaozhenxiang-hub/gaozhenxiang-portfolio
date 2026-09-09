@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 
 import {
+  calculateContactProgress,
+  calculateGalleryMaximum,
   calculateMetadataDepthLayout,
   calculatePointerImpulse,
   clampPosition,
@@ -50,7 +52,7 @@ export function useDragGallery() {
     const getMaximum = () => {
       const grid = stage.querySelector<HTMLElement>(".gallery-grid--metadata");
       if (!grid) return 0;
-      return Math.max(0, grid.offsetTop + grid.scrollHeight - window.innerHeight + 48);
+      return calculateGalleryMaximum(grid.offsetTop, grid.scrollHeight, window.innerHeight);
     };
 
     const setTarget = (next: number) => {
@@ -162,6 +164,11 @@ export function useDragGallery() {
       );
       pointerRef.current = createPointerInteractionFrame(pointerRef.current, delta);
       const visuals = mapVelocityToVisuals(motionRef.current.velocity);
+      const contactProgress = calculateContactProgress(
+        motionRef.current.current,
+        getMaximum(),
+        window.innerHeight,
+      );
       stage.style.setProperty("--gallery-y", motionRef.current.current.toFixed(3));
       stage.style.setProperty("--gallery-bend", visuals.bend.toFixed(4));
       stage.style.setProperty("--gallery-skew", visuals.skew.toFixed(4));
@@ -169,6 +176,7 @@ export function useDragGallery() {
       stage.style.setProperty("--pointer-x", pointerRef.current.x.toFixed(4));
       stage.style.setProperty("--pointer-y", pointerRef.current.y.toFixed(4));
       stage.style.setProperty("--pointer-strength", pointerRef.current.strength.toFixed(4));
+      stage.style.setProperty("--contact-progress", contactProgress.toFixed(4));
       stage.dataset.pointerActive = pointerRef.current.strength > 0.025 ? "true" : "false";
       const grid = stage.querySelector<HTMLElement>(".gallery-grid--metadata");
       if (grid) {

@@ -76,3 +76,25 @@ test("receding cards remain rendered beneath the protected title area", async ({
   expect(veilStyle.height).toBeLessThanOrEqual(240);
   expect(veilStyle.zIndex).toBeGreaterThan(1);
 });
+
+test("contact finale follows the projects and returns to the gallery", async ({ page }) => {
+  await page.goto("/");
+
+  const finale = page.getByTestId("contact-finale");
+  await expect(page.getByTestId("gallery-stage")).toHaveClass(/webgl-ready/);
+  await expect(finale).not.toBeInViewport();
+
+  await page.mouse.wheel(0, 10000);
+  await page.waitForTimeout(1400);
+
+  await expect(page.getByRole("heading", { name: "高振翔" })).toBeInViewport();
+  await expect(page.getByRole("link", { name: /电话 13293941800/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /邮箱 13293941800@163.com/ })).toBeVisible();
+  const finaleBox = await finale.boundingBox();
+  expect(finaleBox?.y).toBeCloseTo(0, 0);
+  expect(finaleBox?.height).toBeGreaterThanOrEqual(page.viewportSize()?.height ?? 0);
+
+  await page.mouse.wheel(0, -10000);
+  await page.waitForTimeout(1400);
+  await expect(page.getByTestId("project-card").first()).toBeInViewport();
+});

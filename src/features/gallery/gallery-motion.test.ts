@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  calculateContactProgress,
+  calculateGalleryMaximum,
   calculatePointerImpulse,
   calculateDepthRecession,
   calculateDepthTransform,
@@ -17,6 +19,18 @@ import {
 } from "./gallery-motion";
 
 describe("gallery motion", () => {
+  it("fades the gallery chrome as the contact finale enters", () => {
+    expect(calculateContactProgress(4100, 5000, 1000)).toBe(0);
+    expect(calculateContactProgress(4500, 5000, 1000)).toBeGreaterThan(0);
+    expect(calculateContactProgress(4820, 5000, 1000)).toBe(1);
+    expect(calculateContactProgress(5000, 5000, 1000)).toBe(1);
+  });
+
+  it("includes the full contact finale in the bounded travel range", () => {
+    expect(calculateGalleryMaximum(262, 5200, 900)).toBe(4562);
+    expect(calculateGalleryMaximum(262, 500, 900)).toBe(0);
+  });
+
   it("clamps position to the content range", () => {
     expect(clampPosition(-20, 900)).toBe(0);
     expect(clampPosition(1200, 900)).toBe(900);

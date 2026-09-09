@@ -34,4 +34,20 @@ describe("GalleryPage", () => {
     expect(screen.getByText("Branding")).toBeVisible();
     expect(screen.getByText("Experiment")).toBeVisible();
   });
+
+  it("renders the approved contact finale with callable links", () => {
+    render(<GalleryPage />);
+
+    expect(screen.getByTestId("contact-finale")).toBeVisible();
+    expect(screen.getByRole("heading", { name: "高振翔" })).toBeVisible();
+    expect(screen.getByText("AIGC CREATOR")).toBeVisible();
+    expect(screen.getByRole("link", { name: /电话 13293941800/ })).toHaveAttribute(
+      "href",
+      "tel:13293941800",
+    );
+    expect(screen.getByRole("link", { name: /邮箱 13293941800@163.com/ })).toHaveAttribute(
+      "href",
+      "mailto:13293941800@163.com",
+    );
+  });
 });

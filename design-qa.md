@@ -1,17 +1,20 @@
-# Design QA — Unseen Projects core gallery
+# Design QA — Projects gallery and personal contact finale
 
 ## Comparison setup
 
 - Source visual truth: `output/reference/feedback-1049-pointer-4_8.png` and the two-frame interaction detail `output/reference/feedback-1049-pointer-detail.png`, extracted from the supplied `20260909-1049-41.2257840.mp4` recording; the live source was also opened in the user's Chrome profile at `https://unseen.co/projects/`.
+- Contact source truth: the user-approved specification at `docs/superpowers/specs/2026-09-09-contact-finale-design.md`. The user explicitly chose not to provide a separate footer reference, so this section is evaluated as visible conformance to that approved spec rather than a pixel match to an external design.
 - Implementation rest capture: `output/qa/gallery-rest-later-chrome-recording-reference.png`.
 - Implementation pointer capture: `output/qa/gallery-pointer-motion-chrome-recording-reference.png`.
 - Implementation drag/depth captures: `output/qa/gallery-drag-chrome-recording-reference.png` and `output/qa/gallery-depth-chrome-recording-reference.png`.
+- Implementation contact captures: `output/qa/gallery-contact-finale-chrome-1440.png`, `output/qa/gallery-contact-finale-edge-1080p.png`, and `output/qa/gallery-contact-finale-chrome-recording-reference.png`.
 - Full-view comparison input: `output/qa/comparison-feedback-1049-pointer-velocity.png`.
 - Focused before/after pointer comparison: `output/qa/comparison-pointer-velocity-sequence.png` and `output/qa/comparison-pointer-local-crop.png`.
 - Source pixels: 2560 × 1528 including browser chrome. Implementation pixels: 2189 × 1292 from a 1459 × 861 CSS viewport at device scale 1.5. The implementation was scaled to the source canvas only for the full-view comparison; browser chrome and capture compression were excluded from design findings.
 - Cross-browser viewports: Chrome 1440 × 900, Edge 1920 × 1080, and Chrome 1459 × 861 at device scale 1.5.
-- States: initial/resting gallery, pointer moving without a button press, pointer stopped for 500 ms, active drag, released inertia, and depth recession.
-- Scope: desktop Projects gallery and pointer/wheel interaction. Mobile, project detail routes, sound, menu behavior, and production filter logic remain intentionally out of scope.
+- Contact implementation pixels/CSS/density: 1440 × 900 at 1440 × 900 CSS / 1x; 1920 × 1080 at 1920 × 1080 CSS / 1x; 2189 × 1292 at 1459 × 861 CSS / 1.5x. No density normalization was needed for layout judgment because each capture was checked against its own CSS viewport.
+- States: initial/resting gallery, pointer moving without a button press, pointer stopped for 500 ms, active drag, released inertia, depth recession, contact entrance, contact final position, and reverse return to projects.
+- Scope: desktop Projects gallery, pointer/wheel interaction, and the bottom personal contact finale. Mobile, cover screen, project detail routes, sound, menu behavior, public deployment, and production filter logic remain intentionally out of scope.
 
 ## Findings and comparison history
 
@@ -24,26 +27,33 @@
 7. **P2 — background and imagery were too gray/dark.** Prior iterations moved the field to warm white, reduced background-sculpture opacity, narrowed the side forms, and added a restrained image wash.
 8. **P2 — drag bending was too uniformly arched and shrink completed too abruptly.** Prior iterations reduced the symmetric velocity bow, introduced phase-offset deformation, widened the recession interval, and increased distance/tilt. Those approved behaviors are unchanged in this pointer-only iteration.
 9. **P2 — too few examples shortened the experience.** The framework retains twenty-two replaceable English examples using local bundled imagery.
+10. **P1 — first contact capture clipped the name and retained gallery chrome.** The initial final-position capture placed the contact panel above the viewport while the brand, navigation, `Selected Projects` title, filters, veil, and drag cue remained over it.
+11. **Fix:** Contact entrance progress is now derived from bounded gallery travel. Gallery chrome and texture noise fade as the contact panel enters, while the panel's final travel aligns its top edge to the viewport.
+12. **P2 — first alignment correction left a 48 px gallery-colored strip at the bottom.** The contact panel height and the gallery's extra end travel did not describe the same final frame.
+13. **Fix:** The contact panel now occupies exactly `100vh`, and the bounded gallery maximum aligns content bottom to viewport bottom without extra travel. The post-fix captures show a continuous white field from top to bottom in all three desktop configurations.
+14. **Post-fix contact evidence:** The three contact captures show the complete `高振翔` heading, `AIGC CREATOR`, Chinese `电话` and `邮箱` labels, readable values, no gallery header/filter overlap, and no cards, icons, borders, gradients, or decorative imagery. Phone and email interaction is verified separately by accessible link assertions.
 
 No actionable P0, P1, or P2 issue remains in the approved scope after the velocity-amplitude refinement.
 
 ## Required fidelity surfaces
 
-- **Fonts and typography:** Heading, navigation, filter, count, metadata weight, line height, and wrapping remain unchanged from the previously approved pass. The local render is cleaner than the compressed source recording; no new typography drift was introduced.
-- **Spacing and layout rhythm:** Two media columns, 42 px gutter, 1304 px cap, metadata spacing, protected heading region, and depth path remain unchanged. Browser-chrome differences were excluded from comparison.
-- **Colors and visual tokens:** Warm-white background, translucent pale sculpture, black active filter, softened imagery, and subtle chromatic edges remain. The removed pointer implementation no longer adds a white orb or bright circular bands.
+- **Fonts and typography:** Gallery heading, navigation, filter, count, and metadata remain unchanged from the previously approved pass. The contact finale uses a dominant large Chinese name, regular optical weight, tight display spacing, smaller uppercase role text, and readable contact values without wrapping at the three tested desktop widths.
+- **Spacing and layout rhythm:** The gallery retains its two media columns, 42 px gutter, 1304 px cap, metadata spacing, protected heading region, and depth path. The finale fills one viewport, uses generous top/side/bottom padding, and separates identity from a bottom-aligned two-column contact row.
+- **Colors and visual tokens:** The gallery retains its warm-white atmosphere and softened imagery. The finale is a continuous pure-white field with near-black typography; the gallery texture/noise and fixed chrome fade to zero before the final state.
 - **Image quality and asset fidelity:** Images are local, cover-cropped, shader-rendered, and free of hotlinks. Pointer movement now deforms the image surface while a stationary cursor contributes exactly zero shader displacement/light.
-- **Copy and content:** Captured English title, filters, counts, navigation, and project metadata remain as framework content for later replacement with the user's portfolio.
+- **Copy and content:** Gallery English framework copy remains for later portfolio replacement. The contact finale uses the exact approved content: `高振翔`, `AIGC CREATOR`, `电话 13293941800`, and `邮箱 13293941800@163.com`.
 - **Icons:** Existing brand, menu, project-arrow, and corner controls retain their earlier size/alignment. No icon was introduced or replaced in this iteration.
-- **Accessibility and viewport resilience:** Pointer motion is decorative and does not gate navigation. Desktop Chrome/Edge layouts did not overlap or clip at the tested widths. Mobile remains outside the user-approved scope.
+- **Accessibility and viewport resilience:** Pointer motion is decorative and does not gate navigation. The phone and email are semantic links with descriptive accessible names and correct `tel:`/`mailto:` targets. Desktop Chrome/Edge layouts did not overlap or clip at the tested widths. Mobile remains outside the user-approved scope.
+
+Focused-region comparison was not required for the contact finale because all four text groups and the entire white frame are clearly readable in the full-view captures. The previously recorded focused pointer comparisons remain the relevant detail evidence for shader fidelity.
 
 ## Interaction and browser checks
 
 - Pointer movement activates `data-pointer-active`; after 500 ms without movement it returns to `false`.
 - Chrome and Edge: wheel, pointer move, pointer down/drag/up, bounded inertia, depth recession, and protected heading all passed.
-- Standard browser suite: 9/9 passed across Chrome 1440, Edge 1080p, and the matched Chrome recording viewport.
-- Visual capture suite: 12/12 passed across the same three projects.
-- Unit/component suite: 28/28 passed across 5 files.
+- Standard browser suite: 12/12 passed across Chrome 1440, Edge 1080p, and the matched Chrome recording viewport.
+- Visual capture suite: 15/15 passed across the same three projects.
+- Unit/component suite: 30/30 passed across 5 files.
 - Lint and production build: passed.
 - Console: no application error was observed. The upstream Three.js `Clock` deprecation warning remains non-blocking.
 

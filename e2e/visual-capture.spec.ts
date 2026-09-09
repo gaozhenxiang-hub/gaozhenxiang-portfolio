@@ -60,3 +60,17 @@ test("capture a project row receding toward the vanishing point", async ({ page 
     fullPage: false,
   });
 });
+
+test("capture the contact finale", async ({ page }, testInfo) => {
+  test.skip(process.env.CAPTURE_QA !== "1", "Run with CAPTURE_QA=1 for visual QA artifacts.");
+
+  await page.goto("/");
+  await expect(page.getByTestId("gallery-stage")).toHaveClass(/webgl-ready/);
+  await page.mouse.wheel(0, 10000);
+  await page.waitForTimeout(1600);
+  await expect(page.getByRole("heading", { name: "高振翔" })).toBeInViewport();
+  await page.screenshot({
+    path: `output/qa/gallery-contact-finale-${testInfo.project.name}.png`,
+    fullPage: false,
+  });
+});

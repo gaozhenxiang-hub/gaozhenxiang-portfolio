@@ -21,6 +21,21 @@ export type GalleryVisuals = {
   stretch: number;
 };
 
+export function calculateGalleryMaximum(
+  contentTop: number,
+  contentHeight: number,
+  viewportHeight: number,
+) {
+  return Math.max(0, contentTop + contentHeight - viewportHeight);
+}
+
+export function calculateContactProgress(current: number, maximum: number, viewportHeight: number) {
+  if (maximum <= 0 || viewportHeight <= 0) return 0;
+  const start = maximum - viewportHeight * 0.9;
+  const end = maximum - viewportHeight * 0.18;
+  return Math.min(1, Math.max(0, (current - start) / Math.max(end - start, 1)));
+}
+
 export function clampPosition(value: number, max: number) {
   return Math.min(Math.max(value, 0), Math.max(max, 0));
 }
