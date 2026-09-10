@@ -505,3 +505,7 @@ The user subsequently supplied `真人电影-困难1.mp4` and `漫剧-困难1.mp
 ## Latest copy refinement
 
 Remove sequence-number suffixes from all visible project titles. For example, the three `Cinematic Study 01/02/03` entries all display `Cinematic Study`; `Commercial Study 01/02`, `Game Cinematic 01`, and `Comic Drama Study 01` follow the same rule. Keep ids, filenames, descriptions, order, media, and interactions unchanged. Do not remove meaningful numbers embedded in actual names such as `25 Residences`.
+
+## Approved image-project copy refinement
+
+Replace only the visible titles and descriptions for positions 1 through 12 with the user-approved content-based English labels. Keep all ids, image paths, order, video entries, layout, and interactions unchanged. Update the content regression fixture first, verify the expected red failure, then update the project records and run the full verification gate.

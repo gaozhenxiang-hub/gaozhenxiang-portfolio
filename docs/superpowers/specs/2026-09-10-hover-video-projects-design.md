@@ -2,7 +2,7 @@
 
 ## Approved outcome
 
-Keep the first twelve existing image projects exactly as they are. Use the twelve user-supplied videos in project positions 13 through 24, preserving the current two-column gallery, drag/wheel travel, pointer-velocity distortion, curved media surface, depth recession, and contact finale.
+Keep the first twelve existing image assets and their order exactly as they are. Use the twelve user-supplied videos in project positions 13 through 24, preserving the current two-column gallery, drag/wheel travel, pointer-velocity distortion, curved media surface, depth recession, and contact finale.
 
 The gallery remains desktop-only and contains twenty-four projects in total.
 
@@ -25,7 +25,7 @@ The twelve videos appear in the exact order in which the user supplied them:
 | 23 | `真人电影-困难1.mp4` | `Cinematic Study` | `AI Live-Action Film` |
 | 24 | `漫剧-困难1.mp4` | `Comic Drama Study` | `AI Comic Drama` |
 
-All visible gallery copy remains English. The first twelve project records, titles, descriptions, images, and order remain unchanged.
+All visible gallery copy remains English. The first twelve project ids, images, and order remain unchanged; their visible titles and descriptions follow the later approved content-based naming refinement.
 
 ## Interaction
 
@@ -69,11 +69,11 @@ Video previews are decorative portfolio thumbnails: they are muted, have no cont
 
 ## Scope
 
-This iteration changes only positions 13 through 24 and the supporting hover-preview system. It does not change the first twelve projects, gallery layout, shader art direction, drag/wheel behavior, cover page, contact details, mobile support, project detail pages, or deployment.
+The video iteration changes only positions 13 through 24 and the supporting hover-preview system. The later copy refinement changes only visible text for positions 1 through 12. Neither changes the gallery layout, shader art direction, drag/wheel behavior, cover page, contact details, mobile support, project detail pages, or deployment.
 
 ## Verification
 
-- Content tests prove the first twelve entries are byte-for-byte unchanged in their visible fields and image paths.
+- Content tests prove the first twelve entries keep their ids, image paths, and order while using the approved content-based English copy.
 - Content tests prove positions 13 through 24 have the approved English copy, video paths, poster paths, and unique ids.
 - Playback tests prove hover starts muted looping playback and pointer leave pauses and resets it.
 - Component tests prove only video projects render video elements and only one card is marked active.
@@ -83,4 +83,8 @@ This iteration changes only positions 13 through 24 and the supporting hover-pre
 
 ## Approved extension: two additional videos
 
-The later request adds `真人电影-困难1.mp4` and `漫剧-困难1.mp4` after the original ten video projects. The resulting gallery has twenty-four projects: the unchanged first twelve image projects followed by twelve hover-controlled video projects. The same muted loop, pointer-leave reset, shader surface, English-copy convention, encoding profile, and desktop-only scope apply to positions 23 and 24. A subsequent copy refinement removes numeric sequence suffixes such as `01`, `02`, and `03` from every project title while retaining meaningful numbers that are part of a name, such as `25 Residences`.
+The later request adds `真人电影-困难1.mp4` and `漫剧-困难1.mp4` after the original ten video projects. The resulting gallery has twenty-four projects: the unchanged first twelve image assets followed by twelve hover-controlled video projects. The same muted loop, pointer-leave reset, shader surface, English-copy convention, encoding profile, and desktop-only scope apply to positions 23 and 24. A subsequent copy refinement removes numeric sequence suffixes such as `01`, `02`, and `03` from the video-project titles.
+
+## Approved image-project naming refinement
+
+The first twelve image assets and their order remain unchanged, but their inherited source-site project labels are replaced with short English titles and descriptions that describe the visible content: `Blue Portal`, `Creative Desk`, `Blue Planet`, `Liquid Lines`, `Dream Journey`, `Green Future`, `Future Screen`, `Dark Cosmos`, `Modern Living`, `Digital Reef`, `Future Device`, and `Crystal Machine`. This is copy-only; layout, media, and interaction remain unchanged.

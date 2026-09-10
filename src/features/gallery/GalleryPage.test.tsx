@@ -23,7 +23,7 @@ describe("GalleryPage", () => {
     render(<GalleryPage />);
 
     expect(screen.getByRole("heading", { name: "Selected Works" })).toBeVisible();
-    expect(screen.getByText("Hubtown")).toBeVisible();
+    expect(screen.getByText("Blue Portal")).toBeVisible();
     expect(screen.getAllByTestId("project-card")).toHaveLength(24);
     expect(screen.getByTestId("gallery-stage")).toHaveAttribute("data-dragging", "false");
     expect(screen.getByTestId("gallery-canvas")).toBeVisible();

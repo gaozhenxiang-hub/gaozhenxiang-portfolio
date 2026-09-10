@@ -2,34 +2,34 @@ import { describe, expect, it } from "vitest";
 
 import { projects } from "./projects";
 
-const originalFirstTwelve = [
-  ["hubtown", "Hubtown", "Portfolio Website, Immersive Experience", "/gallery/hubtown.webp"],
-  ["poly", "Poly", "Website Design", "/gallery/poly.webp"],
-  ["oceanx", "OceanX", "A Year of Discovery", "/gallery/oceanx.webp"],
+const approvedImageProjectCopy = [
+  ["hubtown", "Blue Portal", "Digital Dreamscape", "/gallery/hubtown.webp"],
+  ["poly", "Creative Desk", "Digital Workspace", "/gallery/poly.webp"],
+  ["oceanx", "Blue Planet", "Planetary Vision", "/gallery/oceanx.webp"],
   [
     "symphony-of-vines",
-    "The Symphony Of Vines",
-    "Interactive Cinematic Experience",
+    "Liquid Lines",
+    "Generative Motion",
     "/gallery/symphony-of-vines.webp",
   ],
-  ["klook", "Klook", "Interactive Quiz", "/gallery/klook.webp"],
+  ["klook", "Dream Journey", "Travel Experience", "/gallery/klook.webp"],
   [
     "rspca-animal-futures",
-    "RSPCA Animal Futures",
-    "Interactive Learning Experience",
+    "Green Future",
+    "Eco City Concept",
     "/gallery/rspca-animal-futures.webp",
   ],
-  ["blueyard", "BlueYard", "Portfolio Website", "/gallery/blueyard.webp"],
-  ["cosmos", "Cosmos", "Marketing Website", "/gallery/cosmos.webp"],
-  ["25-residences", "25 Residences", "Portfolio Website", "/gallery/25-residences.webp"],
-  ["organimo", "Organimo", "Digital", "/gallery/organimo.webp"],
+  ["blueyard", "Future Screen", "Digital Interface", "/gallery/blueyard.webp"],
+  ["cosmos", "Dark Cosmos", "Immersive Space", "/gallery/cosmos.webp"],
+  ["25-residences", "Modern Living", "Interior Showcase", "/gallery/25-residences.webp"],
+  ["organimo", "Digital Reef", "Surreal Webscape", "/gallery/organimo.webp"],
   [
     "hiring-calculator",
-    "Hiring Calculator",
-    "Gamified Digital Experience",
+    "Future Device",
+    "Product Concept",
     "/gallery/hiring-calculator.webp",
   ],
-  ["robco", "RobCo", "3D Motion", "/gallery/robco.webp"],
+  ["robco", "Crystal Machine", "Technology Motion", "/gallery/robco.webp"],
 ];
 
 describe("projects", () => {
@@ -48,7 +48,7 @@ describe("projects", () => {
     expect(projects.every((project) => !/\s\d{2}$/.test(project.title))).toBe(true);
   });
 
-  it("keeps the first twelve image projects unchanged", () => {
+  it("uses the approved content-based copy for the first twelve image projects", () => {
     expect(
       projects.slice(0, 12).map(({ id, title, description, image }) => [
         id,
@@ -56,7 +56,7 @@ describe("projects", () => {
         description,
         image,
       ]),
-    ).toEqual(originalFirstTwelve);
+    ).toEqual(approvedImageProjectCopy);
     expect(projects.slice(0, 12).every((project) => project.video === undefined)).toBe(true);
   });
 
