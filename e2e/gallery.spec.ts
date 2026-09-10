@@ -98,3 +98,48 @@ test("contact finale follows the projects and returns to the gallery", async ({ 
   await page.waitForTimeout(1400);
   await expect(page.getByTestId("project-card").first()).toBeInViewport();
 });
+
+test("later projects play muted on hover and reset on exit", async ({ page }) => {
+  await page.goto("/");
+  const card = page.getByTestId("project-card").nth(12);
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const box = await card.boundingBox();
+    if (box && box.y > 160 && box.y < 650) break;
+    await page.mouse.wheel(0, 500);
+    await page.waitForTimeout(220);
+  }
+
+  const media = card.locator(".project-media");
+  const mediaBox = await media.boundingBox();
+  expect(mediaBox).not.toBeNull();
+  await page.mouse.move(
+    mediaBox!.x + mediaBox!.width / 2,
+    mediaBox!.y + mediaBox!.height / 2,
+  );
+
+  const video = card.locator("video");
+  await expect
+    .poll(() =>
+      video.evaluate((node) => {
+        const element = node as HTMLVideoElement;
+        return { paused: element.paused, muted: element.muted, loop: element.loop };
+      }),
+    )
+    .toEqual({ paused: false, muted: true, loop: true });
+  const startedAt = await video.evaluate((node) => (node as HTMLVideoElement).currentTime);
+  await page.waitForTimeout(450);
+  expect(await video.evaluate((node) => (node as HTMLVideoElement).currentTime)).toBeGreaterThan(
+    startedAt,
+  );
+
+  await page.mouse.move(12, 12);
+  await expect
+    .poll(() =>
+      video.evaluate((node) => {
+        const element = node as HTMLVideoElement;
+        return { paused: element.paused, time: element.currentTime };
+      }),
+    )
+    .toEqual({ paused: true, time: 0 });
+});
