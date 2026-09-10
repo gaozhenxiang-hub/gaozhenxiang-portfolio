@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("gallery renders and responds to wheel and pointer drag", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: "Selected Projects" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Selected Works" })).toBeVisible();
   await expect(page.getByTestId("project-card")).toHaveCount(22);
 
   const stage = page.getByTestId("gallery-stage");
@@ -45,7 +45,7 @@ test("gallery renders and responds to wheel and pointer drag", async ({ page }) 
 test("gallery starts at the captured desktop composition", async ({ page }) => {
   await page.goto("/");
 
-  const heading = page.getByRole("heading", { name: "Selected Projects" });
+  const heading = page.getByRole("heading", { name: "Selected Works" });
   const firstCard = page.getByTestId("project-card").first();
   const headingBox = await heading.boundingBox();
   const cardBox = await firstCard.boundingBox();

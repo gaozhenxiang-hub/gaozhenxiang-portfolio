@@ -30,7 +30,7 @@ export function GalleryPage() {
       <div className="gallery-atmosphere" aria-hidden="true" />
 
       <section className="gallery-filter" aria-label="Project filters">
-        <h1>Selected Projects</h1>
+        <h1>Selected Works</h1>
       </section>
 
       <div className="gallery-viewport">

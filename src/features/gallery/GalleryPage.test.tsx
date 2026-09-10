@@ -22,7 +22,7 @@ describe("GalleryPage", () => {
   it("renders the captured gallery hierarchy and all projects", () => {
     render(<GalleryPage />);
 
-    expect(screen.getByRole("heading", { name: "Selected Projects" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Selected Works" })).toBeVisible();
     expect(screen.getByText("Hubtown")).toBeVisible();
     expect(screen.getAllByTestId("project-card")).toHaveLength(22);
     expect(screen.getByTestId("gallery-stage")).toHaveAttribute("data-dragging", "false");

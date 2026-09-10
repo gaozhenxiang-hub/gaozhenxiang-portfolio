@@ -4,6 +4,7 @@
 
 - Source visual truth: `output/reference/feedback-1049-pointer-4_8.png` and the two-frame interaction detail `output/reference/feedback-1049-pointer-detail.png`, extracted from the supplied `20260909-1049-41.2257840.mp4` recording; the live source was also opened in the user's Chrome profile at `https://unseen.co/projects/`.
 - Latest user edit target: `C:/Users/g3320/AppData/Local/Temp/codex-clipboard-e9a8f5c7-c0e1-4950-be21-bdac3176cdfe.png`, with the explicit instruction to remove the complete category/count row below `Selected Projects`.
+- Personal-title edit target: `C:/Users/g3320/AppData/Local/Temp/codex-clipboard-3dcb93b4-f2ac-413d-a70a-bda467555fc2.png`. The user approved replacing the studio-oriented `Selected Projects` with `Selected Works` while preserving its typography and placement.
 - Contact source truth: the user-approved specification at `docs/superpowers/specs/2026-09-09-contact-finale-design.md`. The user explicitly chose not to provide a separate footer reference, so this section is evaluated as visible conformance to that approved spec rather than a pixel match to an external design.
 - Video source truth: the ten user-supplied MP4 files and the approved order/copy/interaction specification at `docs/superpowers/specs/2026-09-10-hover-video-projects-design.md`.
 - Earlier video-row reference: `C:/Users/g3320/AppData/Local/Temp/codex-clipboard-838ac3a9-fa25-4f38-b863-7cff283733e1.png`, used to confirm that the two-column media geometry, metadata rhythm, background field, and curved-plane treatment remain consistent when the placeholder images are replaced.
@@ -45,16 +46,17 @@
 19. **Idle-state inspection:** The ten-poster sheet confirms every opening frame is readable, correctly oriented, and free of accidental black frames. The idle Chrome/Edge captures show the first video row in the same two-column layout and on the same curved WebGL surface as the image rows.
 20. **Active-state inspection:** The active capture visibly differs from the idle capture inside the lower-left project plane while retaining the plane's curved upper/lower edges, depth position, crop, and surrounding metadata geometry. There is no flat DOM overlay, black flash, fixed ripple, border, or playback control.
 21. **Playback behavior:** Real Chrome, Edge, and recording-reference tests confirm the hovered video is muted, looping, not paused, and advancing in time. Moving the pointer away pauses it and resets `currentTime` to zero. Exclusive React state prevents two project previews from remaining active together.
+22. **Personal portfolio title:** `Selected Projects` described agency-style project cases and retained source-site wording. The approved `Selected Works` is shorter, identifies the content as a curated body of personal work, and preserves the same centered type scale, optical weight, vertical position, and first-row spacing in the matched recording capture.
 
 No actionable P0, P1, or P2 issue remains in the approved scope after the velocity-amplitude refinement.
 
 ## Required fidelity surfaces
 
-- **Fonts and typography:** Gallery heading and metadata remain unchanged from the previously approved pass; the original brand/navigation and category/count typography are intentionally absent. The contact finale uses a dominant large Chinese name, regular optical weight, tight display spacing, smaller uppercase role text, and readable contact values without wrapping at the three tested desktop widths.
+- **Fonts and typography:** The gallery heading now reads `Selected Works` using the same font, size, weight, line height, centered alignment, and vertical position as the previously approved heading. Project metadata remains unchanged; the original brand/navigation and category/count typography is intentionally absent. The contact finale uses a dominant large Chinese name, regular optical weight, tight display spacing, smaller uppercase role text, and readable contact values without wrapping at the three tested desktop widths.
 - **Spacing and layout rhythm:** The gallery retains its two media columns, 42 px gutter, 1304 px cap, metadata spacing, protected heading region, and depth path. The finale fills one viewport, uses generous top/side/bottom padding, and separates identity from a bottom-aligned two-column contact row.
 - **Colors and visual tokens:** The gallery retains its warm-white atmosphere and softened imagery. The finale is a continuous pure-white field with near-black typography; the gallery texture/noise and fixed chrome fade to zero before the final state.
 - **Image/video quality and asset fidelity:** All media is local, cover-cropped, shader-rendered, and free of hotlinks. The first twelve image paths are unchanged. Positions 13 through 22 use optimized copies of the user's real videos and matching opening-frame posters. Pointer movement continues to deform both image and video surfaces while a stationary cursor contributes exactly zero shader displacement/light.
-- **Copy and content:** The first twelve project labels remain unchanged. The final ten use the approved English titles and descriptions from `Cinematic Study 01` through `Urban Fault`. The user-requested studio brand, top navigation, menu, and category/count row remain removed. The contact finale keeps `高振翔`, `AIGC CREATOR`, `电话 13293941800`, and `邮箱 13293941800@163.com`.
+- **Copy and content:** The main gallery title is the approved `Selected Works`. The first twelve project labels remain unchanged. The final ten use the approved English titles and descriptions from `Cinematic Study 01` through `Urban Fault`. The user-requested studio brand, top navigation, menu, and category/count row remain removed. The contact finale keeps `高振翔`, `AIGC CREATOR`, `电话 13293941800`, and `邮箱 13293941800@163.com`.
 - **Icons:** The project arrow and bottom-right drag cue retain their earlier size and alignment. The removed brand/navigation/menu chrome remains absent, and video previews introduce no controls or new icons.
 - **Accessibility and viewport resilience:** Pointer motion is decorative and does not gate navigation. The phone and email are semantic links with descriptive accessible names and correct `tel:`/`mailto:` targets. Desktop Chrome/Edge layouts did not overlap or clip at the tested widths. Mobile remains outside the user-approved scope.
 
@@ -68,6 +70,7 @@ Focused-region comparison was not required for the contact finale because all fo
 - Current browser regression suite: 15/15 passed across Chrome 1440, Edge 1080p, and the matched recording viewport.
 - Visual capture suite: 18/18 passed across the same three projects, including idle and active video states.
 - Latest category-row removal capture: 1/1 passed at Chrome 1440 × 900 and was visually inspected.
+- Latest `Selected Works` heading check: 3/3 passed at Chrome 1440, Edge 1080p, and the matched recording viewport; the matched capture was compared with the supplied `Selected Projects` crop.
 - Unit/component suite: 37/37 passed across 6 files.
 - Lint and production build: passed.
 - Console: no application error was observed. The upstream Three.js `Clock` deprecation warning remains non-blocking.
