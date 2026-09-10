@@ -2,15 +2,22 @@
 
 /* eslint-disable @next/next/no-img-element -- exact local source assets also back the WebGL texture layer */
 
+import { useState } from "react";
+
 import { projects } from "@/content/projects";
 import { ContactFinale } from "@/features/contact/ContactFinale";
 import { GalleryCanvas } from "./GalleryCanvas";
+import { ProjectMedia } from "./ProjectMedia";
 import { useDragGallery } from "./useDragGallery";
 
 import "./gallery.css";
 
 export function GalleryPage() {
   const { stageRef, motionRef, pointerRef } = useDragGallery();
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const deactivateProject = (projectId: string) => {
+    setActiveProjectId((current) => (current === projectId ? null : current));
+  };
 
   return (
     <main
@@ -27,13 +34,25 @@ export function GalleryPage() {
       </section>
 
       <div className="gallery-viewport">
-        <GalleryCanvas motionRef={motionRef} pointerRef={pointerRef} />
+        <GalleryCanvas
+          activeProjectId={activeProjectId}
+          motionRef={motionRef}
+          pointerRef={pointerRef}
+        />
         <div className="gallery-grid gallery-grid--metadata">
           {projects.map((project) => (
-            <article className="project-card" data-testid="project-card" key={project.id}>
-              <div className="project-media project-media--fallback">
-                <img src={project.image} alt="" draggable={false} />
-              </div>
+            <article
+              className="project-card"
+              data-preview={activeProjectId === project.id ? "playing" : "idle"}
+              data-testid="project-card"
+              key={project.id}
+            >
+              <ProjectMedia
+                active={activeProjectId === project.id}
+                onActivate={setActiveProjectId}
+                onDeactivate={deactivateProject}
+                project={project}
+              />
               <div className="project-meta">
                 <div>
                   <strong>{project.title}</strong>

@@ -9,6 +9,7 @@ import {
   SRGBColorSpace,
   TextureLoader,
   Vector2,
+  VideoTexture,
 } from "three";
 
 import type { Project } from "@/content/projects";
@@ -19,12 +20,14 @@ import {
   type PointerInteractionState,
 } from "./gallery-motion";
 import { galleryFragmentShader, galleryVertexShader } from "./gallery-shaders";
+import { projectVideoElementId, selectProjectTexture } from "./video-preview";
 
 type MotionRef = { current: MotionState };
 type PointerRef = { current: PointerInteractionState };
 
 type ProjectPlaneProps = {
   project: Project;
+  isActive: boolean;
   x: number;
   baseY: number;
   width: number;
@@ -38,6 +41,7 @@ type ProjectPlaneProps = {
 
 export function ProjectPlane({
   project,
+  isActive,
   x,
   baseY,
   width,
@@ -50,6 +54,7 @@ export function ProjectPlane({
 }: ProjectPlaneProps) {
   const meshRef = useRef<Mesh>(null);
   const materialRef = useRef<ShaderMaterial>(null);
+  const videoTextureRef = useRef<VideoTexture | null>(null);
   const texture = useLoader(TextureLoader, project.image);
   const displayTexture = useMemo(() => {
     const clonedTexture = texture.clone();
@@ -61,6 +66,23 @@ export function ProjectPlane({
   }, [texture]);
 
   useEffect(() => () => displayTexture.dispose(), [displayTexture]);
+
+  useEffect(() => {
+    if (!project.video) return;
+    const video = document.getElementById(projectVideoElementId(project.id));
+    if (!(video instanceof HTMLVideoElement)) return;
+
+    const videoTexture = new VideoTexture(video);
+    videoTexture.colorSpace = SRGBColorSpace;
+    videoTexture.minFilter = LinearFilter;
+    videoTexture.magFilter = LinearFilter;
+    videoTextureRef.current = videoTexture;
+
+    return () => {
+      videoTextureRef.current = null;
+      videoTexture.dispose();
+    };
+  }, [project.id, project.video]);
 
   const image = displayTexture.image as { width?: number; height?: number } | undefined;
   const imageAspect = (image?.width ?? 1024) / (image?.height ?? 538);
@@ -84,6 +106,13 @@ export function ProjectPlane({
 
   useFrame(({ clock, size }) => {
     if (!meshRef.current || !materialRef.current) return;
+    const videoTexture = videoTextureRef.current;
+    const videoReady = (videoTexture?.image?.readyState ?? 0) >= 2;
+    materialRef.current.uniforms.uTexture.value = selectProjectTexture(
+      displayTexture,
+      videoTexture,
+      isActive && videoReady,
+    );
     const velocity = Math.max(-1, Math.min(1, motionRef.current.velocity / 11));
     const rawScreenY = viewportHeight / 2 - (baseY + motionRef.current.current);
     const depthTransform = calculateDepthTransform(rawScreenY, cameraDistance);

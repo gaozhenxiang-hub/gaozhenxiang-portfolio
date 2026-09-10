@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { GalleryPage } from "./GalleryPage";
 
@@ -13,6 +13,10 @@ vi.mock("./useDragGallery", () => ({
     motionRef: { current: { current: 0, target: 0, velocity: 0 } },
   }),
 }));
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe("GalleryPage", () => {
   it("renders the captured gallery hierarchy and all projects", () => {
@@ -57,5 +61,30 @@ describe("GalleryPage", () => {
       "href",
       "mailto:13293941800@163.com",
     );
+  });
+
+  it("activates only one of the ten video previews at a time", async () => {
+    const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined);
+    const pause = vi
+      .spyOn(HTMLMediaElement.prototype, "pause")
+      .mockImplementation(() => undefined);
+    render(<GalleryPage />);
+
+    const cards = screen.getAllByTestId("project-card");
+    expect(screen.getAllByTestId("project-video")).toHaveLength(10);
+    expect(cards[0].querySelector("video")).toBeNull();
+    expect(screen.getByText("Cinematic Study 01")).toBeVisible();
+
+    fireEvent.pointerEnter(cards[12].querySelector(".project-media")!);
+    await waitFor(() => expect(cards[12]).toHaveAttribute("data-preview", "playing"));
+    expect(play).toHaveBeenCalledTimes(1);
+
+    fireEvent.pointerEnter(cards[13].querySelector(".project-media")!);
+    await waitFor(() => expect(cards[13]).toHaveAttribute("data-preview", "playing"));
+    expect(cards[12]).toHaveAttribute("data-preview", "idle");
+    expect(pause).toHaveBeenCalled();
+
+    fireEvent.pointerLeave(cards[13].querySelector(".project-media")!);
+    await waitFor(() => expect(cards[13]).toHaveAttribute("data-preview", "idle"));
   });
 });

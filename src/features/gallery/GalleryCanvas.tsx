@@ -70,7 +70,15 @@ function BackgroundSculpture({ motionRef }: { motionRef: MotionRef }) {
   );
 }
 
-function GalleryScene({ motionRef, pointerRef }: { motionRef: MotionRef; pointerRef: PointerRef }) {
+function GalleryScene({
+  activeProjectId,
+  motionRef,
+  pointerRef,
+}: {
+  activeProjectId: string | null;
+  motionRef: MotionRef;
+  pointerRef: PointerRef;
+}) {
   const { size } = useThree();
   const didSignalReady = useRef(false);
   const fov = 35;
@@ -112,6 +120,7 @@ function GalleryScene({ motionRef, pointerRef }: { motionRef: MotionRef; pointer
           <ProjectPlane
             key={project.id}
             project={project}
+            isActive={activeProjectId === project.id}
             x={x}
             baseY={baseY}
             width={cardWidth}
@@ -128,7 +137,15 @@ function GalleryScene({ motionRef, pointerRef }: { motionRef: MotionRef; pointer
   );
 }
 
-export function GalleryCanvas({ motionRef, pointerRef }: { motionRef: MotionRef; pointerRef: PointerRef }) {
+export function GalleryCanvas({
+  activeProjectId,
+  motionRef,
+  pointerRef,
+}: {
+  activeProjectId: string | null;
+  motionRef: MotionRef;
+  pointerRef: PointerRef;
+}) {
   return (
     <div className="gallery-canvas" aria-hidden="true" data-testid="gallery-canvas">
       <Canvas
@@ -136,7 +153,11 @@ export function GalleryCanvas({ motionRef, pointerRef }: { motionRef: MotionRef;
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       >
         <Suspense fallback={null}>
-          <GalleryScene motionRef={motionRef} pointerRef={pointerRef} />
+          <GalleryScene
+            activeProjectId={activeProjectId}
+            motionRef={motionRef}
+            pointerRef={pointerRef}
+          />
         </Suspense>
       </Canvas>
     </div>
