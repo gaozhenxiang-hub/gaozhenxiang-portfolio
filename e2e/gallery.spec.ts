@@ -111,7 +111,7 @@ test("later projects play muted on hover and reset on exit", async ({ page }) =>
   }
 
   const media = card.locator(".project-media");
-  await expect(card.getByText("Comic Drama Study 01")).toBeVisible();
+  await expect(card.getByText("Comic Drama Study")).toBeVisible();
   await expect(card.locator("video")).toHaveAttribute(
     "src",
     "/gallery/videos/comic-drama-study-01.mp4",

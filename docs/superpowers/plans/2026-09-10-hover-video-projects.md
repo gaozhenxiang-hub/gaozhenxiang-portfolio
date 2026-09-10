@@ -501,3 +501,7 @@ git commit -m "test: verify hover video gallery"
 ## Approved extension: positions 23 and 24
 
 The user subsequently supplied `真人电影-困难1.mp4` and `漫剧-困难1.mp4` and approved adding both after the existing entries. Encode them with the same web profile, generate matching WebP posters, append `Cinematic Study 03 — AI Live-Action Film` and `Comic Drama Study 01 — AI Comic Drama`, and extend the content/component/browser assertions from 22 projects and 10 videos to 24 projects and 12 videos. Preserve every existing project and interaction unchanged.
+
+## Latest copy refinement
+
+Remove sequence-number suffixes from all visible project titles. For example, the three `Cinematic Study 01/02/03` entries all display `Cinematic Study`; `Commercial Study 01/02`, `Game Cinematic 01`, and `Comic Drama Study 01` follow the same rule. Keep ids, filenames, descriptions, order, media, and interactions unchanged. Do not remove meaningful numbers embedded in actual names such as `25 Residences`.

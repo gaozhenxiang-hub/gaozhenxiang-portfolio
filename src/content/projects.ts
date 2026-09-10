@@ -96,7 +96,7 @@ export const projects: Project[] = [
   },
   {
     id: "cinematic-study-01",
-    title: "Cinematic Study 01",
+    title: "Cinematic Study",
     description: "AI Live-Action Film",
     category: "Motion",
     image: "/gallery/videos/cinematic-study-01.webp",
@@ -104,7 +104,7 @@ export const projects: Project[] = [
   },
   {
     id: "cinematic-study-02",
-    title: "Cinematic Study 02",
+    title: "Cinematic Study",
     description: "AI Live-Action Film",
     category: "Motion",
     image: "/gallery/videos/cinematic-study-02.webp",
@@ -112,7 +112,7 @@ export const projects: Project[] = [
   },
   {
     id: "commercial-study-01",
-    title: "Commercial Study 01",
+    title: "Commercial Study",
     description: "AI Advertising Film",
     category: "Motion",
     image: "/gallery/videos/commercial-study-01.webp",
@@ -120,7 +120,7 @@ export const projects: Project[] = [
   },
   {
     id: "commercial-study-02",
-    title: "Commercial Study 02",
+    title: "Commercial Study",
     description: "AI Advertising Film",
     category: "Motion",
     image: "/gallery/videos/commercial-study-02.webp",
@@ -128,7 +128,7 @@ export const projects: Project[] = [
   },
   {
     id: "game-cinematic-01",
-    title: "Game Cinematic 01",
+    title: "Game Cinematic",
     description: "AI Game CG",
     category: "Motion",
     image: "/gallery/videos/game-cinematic-01.webp",
@@ -176,7 +176,7 @@ export const projects: Project[] = [
   },
   {
     id: "cinematic-study-03",
-    title: "Cinematic Study 03",
+    title: "Cinematic Study",
     description: "AI Live-Action Film",
     category: "Motion",
     image: "/gallery/videos/cinematic-study-03.webp",
@@ -184,7 +184,7 @@ export const projects: Project[] = [
   },
   {
     id: "comic-drama-study-01",
-    title: "Comic Drama Study 01",
+    title: "Comic Drama Study",
     description: "AI Comic Drama",
     category: "Motion",
     image: "/gallery/videos/comic-drama-study-01.webp",

@@ -73,7 +73,7 @@ describe("GalleryPage", () => {
     const cards = screen.getAllByTestId("project-card");
     expect(screen.getAllByTestId("project-video")).toHaveLength(12);
     expect(cards[0].querySelector("video")).toBeNull();
-    expect(screen.getByText("Cinematic Study 01")).toBeVisible();
+    expect(screen.getAllByText("Cinematic Study")).toHaveLength(3);
 
     fireEvent.pointerEnter(cards[12].querySelector(".project-media")!);
     await waitFor(() => expect(cards[12]).toHaveAttribute("data-preview", "playing"));

@@ -12,18 +12,18 @@ The twelve videos appear in the exact order in which the user supplied them:
 
 | Position | Source video | Visible title | Visible description |
 | --- | --- | --- | --- |
-| 13 | `真人电影-简单4.mp4` | `Cinematic Study 01` | `AI Live-Action Film` |
-| 14 | `真人电影-简单3 (1).mp4` | `Cinematic Study 02` | `AI Live-Action Film` |
-| 15 | `广告-困难3.mp4` | `Commercial Study 01` | `AI Advertising Film` |
-| 16 | `广告-简单3.mp4` | `Commercial Study 02` | `AI Advertising Film` |
-| 17 | `游戏CG-困难1.mp4` | `Game Cinematic 01` | `AI Game CG` |
+| 13 | `真人电影-简单4.mp4` | `Cinematic Study` | `AI Live-Action Film` |
+| 14 | `真人电影-简单3 (1).mp4` | `Cinematic Study` | `AI Live-Action Film` |
+| 15 | `广告-困难3.mp4` | `Commercial Study` | `AI Advertising Film` |
+| 16 | `广告-简单3.mp4` | `Commercial Study` | `AI Advertising Film` |
+| 17 | `游戏CG-困难1.mp4` | `Game Cinematic` | `AI Game CG` |
 | 18 | `冷蓝游戏宣传PV - 副本.mp4` | `Cold Blue` | `Game Promotional Film` |
 | 19 | `年轻剑士与黑甲骑士最终斩击_2K_60fps - 副本.mp4` | `Final Strike` | `Fantasy Action Film` |
 | 20 | `AI幻觉纸拼贴最终成片-15秒-2K-48fps.mp4` | `AI Hallucination` | `Paper Collage Film` |
 | 21 | `midnight-line-final-title-sequence.mp4` | `Midnight Line` | `Title Sequence` |
 | 22 | `都市断层游戏PV.mp4` | `Urban Fault` | `Game Promotional Film` |
-| 23 | `真人电影-困难1.mp4` | `Cinematic Study 03` | `AI Live-Action Film` |
-| 24 | `漫剧-困难1.mp4` | `Comic Drama Study 01` | `AI Comic Drama` |
+| 23 | `真人电影-困难1.mp4` | `Cinematic Study` | `AI Live-Action Film` |
+| 24 | `漫剧-困难1.mp4` | `Comic Drama Study` | `AI Comic Drama` |
 
 All visible gallery copy remains English. The first twelve project records, titles, descriptions, images, and order remain unchanged.
 
@@ -83,4 +83,4 @@ This iteration changes only positions 13 through 24 and the supporting hover-pre
 
 ## Approved extension: two additional videos
 
-The later request adds `真人电影-困难1.mp4` and `漫剧-困难1.mp4` after the original ten video projects. The resulting gallery has twenty-four projects: the unchanged first twelve image projects followed by twelve hover-controlled video projects. The same muted loop, pointer-leave reset, shader surface, English-copy convention, encoding profile, and desktop-only scope apply to positions 23 and 24.
+The later request adds `真人电影-困难1.mp4` and `漫剧-困难1.mp4` after the original ten video projects. The resulting gallery has twenty-four projects: the unchanged first twelve image projects followed by twelve hover-controlled video projects. The same muted loop, pointer-leave reset, shader surface, English-copy convention, encoding profile, and desktop-only scope apply to positions 23 and 24. A subsequent copy refinement removes numeric sequence suffixes such as `01`, `02`, and `03` from every project title while retaining meaningful numbers that are part of a name, such as `25 Residences`.

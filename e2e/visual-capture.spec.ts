@@ -124,7 +124,7 @@ test("capture the two newly added video projects", async ({ page }, testInfo) =>
     await page.waitForTimeout(220);
   }
 
-  await expect(card.getByText("Comic Drama Study 01")).toBeVisible();
+  await expect(card.getByText("Comic Drama Study")).toBeVisible();
   await page.mouse.move(12, 12);
   await page.waitForTimeout(250);
   await page.screenshot({

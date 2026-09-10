@@ -44,6 +44,10 @@ describe("projects", () => {
     expect(projects.every((project) => /^[\x00-\x7F]+$/.test(project.description))).toBe(true);
   });
 
+  it("does not show sequence numbers at the end of project titles", () => {
+    expect(projects.every((project) => !/\s\d{2}$/.test(project.title))).toBe(true);
+  });
+
   it("keeps the first twelve image projects unchanged", () => {
     expect(
       projects.slice(0, 12).map(({ id, title, description, image }) => [
@@ -58,18 +62,18 @@ describe("projects", () => {
 
   it("uses the approved copy and local media for the twelve video projects", () => {
     expect(projects.slice(12).map(({ title, description }) => [title, description])).toEqual([
-      ["Cinematic Study 01", "AI Live-Action Film"],
-      ["Cinematic Study 02", "AI Live-Action Film"],
-      ["Commercial Study 01", "AI Advertising Film"],
-      ["Commercial Study 02", "AI Advertising Film"],
-      ["Game Cinematic 01", "AI Game CG"],
+      ["Cinematic Study", "AI Live-Action Film"],
+      ["Cinematic Study", "AI Live-Action Film"],
+      ["Commercial Study", "AI Advertising Film"],
+      ["Commercial Study", "AI Advertising Film"],
+      ["Game Cinematic", "AI Game CG"],
       ["Cold Blue", "Game Promotional Film"],
       ["Final Strike", "Fantasy Action Film"],
       ["AI Hallucination", "Paper Collage Film"],
       ["Midnight Line", "Title Sequence"],
       ["Urban Fault", "Game Promotional Film"],
-      ["Cinematic Study 03", "AI Live-Action Film"],
-      ["Comic Drama Study 01", "AI Comic Drama"],
+      ["Cinematic Study", "AI Live-Action Film"],
+      ["Comic Drama Study", "AI Comic Drama"],
     ]);
     expect(
       projects.slice(12).every((project) => project.video?.startsWith("/gallery/videos/")),

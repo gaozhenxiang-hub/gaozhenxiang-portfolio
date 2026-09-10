@@ -6,7 +6,7 @@
 - Latest user edit target: `C:/Users/g3320/AppData/Local/Temp/codex-clipboard-e9a8f5c7-c0e1-4950-be21-bdac3176cdfe.png`, with the explicit instruction to remove the complete category/count row below `Selected Projects`.
 - Personal-title edit target: `C:/Users/g3320/AppData/Local/Temp/codex-clipboard-3dcb93b4-f2ac-413d-a70a-bda467555fc2.png`. The user approved replacing the studio-oriented `Selected Projects` with `Selected Works` while preserving its typography and placement.
 - Contact source truth: the user-approved specification at `docs/superpowers/specs/2026-09-09-contact-finale-design.md`. The user explicitly chose not to provide a separate footer reference, so this section is evaluated as visible conformance to that approved spec rather than a pixel match to an external design.
-- Video source truth: the ten user-supplied MP4 files and the approved order/copy/interaction specification at `docs/superpowers/specs/2026-09-10-hover-video-projects-design.md`.
+- Video source truth: the twelve user-supplied MP4 files and the approved order/copy/interaction specification at `docs/superpowers/specs/2026-09-10-hover-video-projects-design.md`.
 - Earlier video-row reference: `C:/Users/g3320/AppData/Local/Temp/codex-clipboard-838ac3a9-fa25-4f38-b863-7cff283733e1.png`, used to confirm that the two-column media geometry, metadata rhythm, background field, and curved-plane treatment remain consistent when the placeholder images are replaced.
 - Implementation rest capture: `output/qa/gallery-rest-later-chrome-recording-reference.png`.
 - Implementation pointer capture: `output/qa/gallery-pointer-motion-chrome-recording-reference.png`.
@@ -47,7 +47,8 @@
 20. **Active-state inspection:** The active capture visibly differs from the idle capture inside the lower-left project plane while retaining the plane's curved upper/lower edges, depth position, crop, and surrounding metadata geometry. There is no flat DOM overlay, black flash, fixed ripple, border, or playback control.
 21. **Playback behavior:** Real Chrome, Edge, and recording-reference tests confirm the hovered video is muted, looping, not paused, and advancing in time. Moving the pointer away pauses it and resets `currentTime` to zero. Exclusive React state prevents two project previews from remaining active together.
 22. **Personal portfolio title:** `Selected Projects` described agency-style project cases and retained source-site wording. The approved `Selected Works` is shorter, identifies the content as a curated body of personal work, and preserves the same centered type scale, optical weight, vertical position, and first-row spacing in the matched recording capture.
-23. **Two-video extension:** `真人电影-困难1.mp4` and `漫剧-困难1.mp4` were appended as positions 23 and 24 with the approved English labels `Cinematic Study 03 — AI Live-Action Film` and `Comic Drama Study 01 — AI Comic Drama`. Their new-row idle/active capture shows both posters correctly filling the existing curved planes; the active comic preview advances to a visibly different frame without exposing a flat DOM layer. The small `AI生成` badge is part of the supplied comic video itself.
+23. **Two-video extension:** `真人电影-困难1.mp4` and `漫剧-困难1.mp4` were appended as positions 23 and 24 with the English labels `Cinematic Study — AI Live-Action Film` and `Comic Drama Study — AI Comic Drama`. Their new-row idle/active capture shows both posters correctly filling the existing curved planes; the active comic preview advances to a visibly different frame without exposing a flat DOM layer. The small `AI生成` badge is part of the supplied comic video itself.
+24. **Sequence-number removal:** Numeric suffixes used only to enumerate repeated project types were removed from all visible titles: `Cinematic Study`, `Commercial Study`, `Game Cinematic`, and `Comic Drama Study` now display without `01`, `02`, or `03`. Meaningful project-name numbers such as `25 Residences` remain unchanged.
 
 No actionable P0, P1, or P2 issue remains in the approved scope after the velocity-amplitude refinement.
 
@@ -57,7 +58,7 @@ No actionable P0, P1, or P2 issue remains in the approved scope after the veloci
 - **Spacing and layout rhythm:** The gallery retains its two media columns, 42 px gutter, 1304 px cap, metadata spacing, protected heading region, and depth path. The finale fills one viewport, uses generous top/side/bottom padding, and separates identity from a bottom-aligned two-column contact row.
 - **Colors and visual tokens:** The gallery retains its warm-white atmosphere and softened imagery. The finale is a continuous pure-white field with near-black typography; the gallery texture/noise and fixed chrome fade to zero before the final state.
 - **Image/video quality and asset fidelity:** All media is local, cover-cropped, shader-rendered, and free of hotlinks. The first twelve image paths are unchanged. Positions 13 through 24 use optimized copies of the user's real videos and matching opening-frame posters. Pointer movement continues to deform both image and video surfaces while a stationary cursor contributes exactly zero shader displacement/light.
-- **Copy and content:** The main gallery title is the approved `Selected Works`. The first twelve project labels remain unchanged. The final twelve use the approved English titles and descriptions from `Cinematic Study 01` through `Comic Drama Study 01`. The user-requested studio brand, top navigation, menu, and category/count row remain removed. The contact finale keeps `高振翔`, `AIGC CREATOR`, `电话 13293941800`, and `邮箱 13293941800@163.com`.
+- **Copy and content:** The main gallery title is the approved `Selected Works`. The first twelve project labels remain unchanged. The final twelve retain their approved English descriptions and now omit sequence-number suffixes from repeated title groups. The user-requested studio brand, top navigation, menu, and category/count row remain removed. The contact finale keeps `高振翔`, `AIGC CREATOR`, `电话 13293941800`, and `邮箱 13293941800@163.com`.
 - **Icons:** The project arrow and bottom-right drag cue retain their earlier size and alignment. The removed brand/navigation/menu chrome remains absent, and video previews introduce no controls or new icons.
 - **Accessibility and viewport resilience:** Pointer motion is decorative and does not gate navigation. The phone and email are semantic links with descriptive accessible names and correct `tel:`/`mailto:` targets. Desktop Chrome/Edge layouts did not overlap or clip at the tested widths. Mobile remains outside the user-approved scope.
 
@@ -73,7 +74,7 @@ Focused-region comparison was not required for the contact finale because all fo
 - Latest two-video row capture: 1/1 passed at the matched Chrome recording viewport; idle and active states were visually inspected.
 - Latest category-row removal capture: 1/1 passed at Chrome 1440 × 900 and was visually inspected.
 - Latest `Selected Works` heading check: 3/3 passed at Chrome 1440, Edge 1080p, and the matched recording viewport; the matched capture was compared with the supplied `Selected Projects` crop.
-- Unit/component suite: 37/37 passed across 6 files.
+- Unit/component suite: 38/38 passed across 6 files.
 - Lint and production build: passed.
 - Console: no application error was observed. The upstream Three.js `Clock` deprecation warning remains non-blocking.
 
