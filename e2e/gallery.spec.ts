@@ -4,7 +4,7 @@ test("gallery renders and responds to wheel and pointer drag", async ({ page }) 
   await page.goto("/");
 
   await expect(page.getByRole("heading", { name: "Selected Works" })).toBeVisible();
-  await expect(page.getByTestId("project-card")).toHaveCount(22);
+  await expect(page.getByTestId("project-card")).toHaveCount(24);
 
   const stage = page.getByTestId("gallery-stage");
   await expect(stage).toHaveClass(/webgl-ready/);
@@ -101,9 +101,9 @@ test("contact finale follows the projects and returns to the gallery", async ({ 
 
 test("later projects play muted on hover and reset on exit", async ({ page }) => {
   await page.goto("/");
-  const card = page.getByTestId("project-card").nth(12);
+  const card = page.getByTestId("project-card").nth(23);
 
-  for (let attempt = 0; attempt < 8; attempt += 1) {
+  for (let attempt = 0; attempt < 24; attempt += 1) {
     const box = await card.boundingBox();
     if (box && box.y > 160 && box.y < 650) break;
     await page.mouse.wheel(0, 500);
@@ -111,6 +111,11 @@ test("later projects play muted on hover and reset on exit", async ({ page }) =>
   }
 
   const media = card.locator(".project-media");
+  await expect(card.getByText("Comic Drama Study 01")).toBeVisible();
+  await expect(card.locator("video")).toHaveAttribute(
+    "src",
+    "/gallery/videos/comic-drama-study-01.mp4",
+  );
   const mediaBox = await media.boundingBox();
   expect(mediaBox).not.toBeNull();
   await page.mouse.move(

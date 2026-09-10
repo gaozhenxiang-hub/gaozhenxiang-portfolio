@@ -497,3 +497,7 @@ Record asset counts and sizes, unit/build results, Chrome/Edge results, playback
 git add e2e/gallery.spec.ts e2e/visual-capture.spec.ts design-qa.md docs/superpowers/plans/2026-09-10-hover-video-projects.md
 git commit -m "test: verify hover video gallery"
 ```
+
+## Approved extension: positions 23 and 24
+
+The user subsequently supplied `真人电影-困难1.mp4` and `漫剧-困难1.mp4` and approved adding both after the existing entries. Encode them with the same web profile, generate matching WebP posters, append `Cinematic Study 03 — AI Live-Action Film` and `Comic Drama Study 01 — AI Comic Drama`, and extend the content/component/browser assertions from 22 projects and 10 videos to 24 projects and 12 videos. Preserve every existing project and interaction unchanged.

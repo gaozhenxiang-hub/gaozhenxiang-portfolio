@@ -174,4 +174,20 @@ export const projects: Project[] = [
     image: "/gallery/videos/urban-fault.webp",
     video: "/gallery/videos/urban-fault.mp4",
   },
+  {
+    id: "cinematic-study-03",
+    title: "Cinematic Study 03",
+    description: "AI Live-Action Film",
+    category: "Motion",
+    image: "/gallery/videos/cinematic-study-03.webp",
+    video: "/gallery/videos/cinematic-study-03.mp4",
+  },
+  {
+    id: "comic-drama-study-01",
+    title: "Comic Drama Study 01",
+    description: "AI Comic Drama",
+    category: "Motion",
+    image: "/gallery/videos/comic-drama-study-01.webp",
+    video: "/gallery/videos/comic-drama-study-01.mp4",
+  },
 ];

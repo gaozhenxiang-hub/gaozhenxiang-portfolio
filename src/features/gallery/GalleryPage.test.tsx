@@ -24,7 +24,7 @@ describe("GalleryPage", () => {
 
     expect(screen.getByRole("heading", { name: "Selected Works" })).toBeVisible();
     expect(screen.getByText("Hubtown")).toBeVisible();
-    expect(screen.getAllByTestId("project-card")).toHaveLength(22);
+    expect(screen.getAllByTestId("project-card")).toHaveLength(24);
     expect(screen.getByTestId("gallery-stage")).toHaveAttribute("data-dragging", "false");
     expect(screen.getByTestId("gallery-canvas")).toBeVisible();
     expect(screen.getByTestId("gallery-top-veil")).toBeVisible();
@@ -63,7 +63,7 @@ describe("GalleryPage", () => {
     );
   });
 
-  it("activates only one of the ten video previews at a time", async () => {
+  it("activates only one of the twelve video previews at a time", async () => {
     const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined);
     const pause = vi
       .spyOn(HTMLMediaElement.prototype, "pause")
@@ -71,7 +71,7 @@ describe("GalleryPage", () => {
     render(<GalleryPage />);
 
     const cards = screen.getAllByTestId("project-card");
-    expect(screen.getAllByTestId("project-video")).toHaveLength(10);
+    expect(screen.getAllByTestId("project-video")).toHaveLength(12);
     expect(cards[0].querySelector("video")).toBeNull();
     expect(screen.getByText("Cinematic Study 01")).toBeVisible();
 

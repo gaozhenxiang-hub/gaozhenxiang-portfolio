@@ -33,10 +33,10 @@ const originalFirstTwelve = [
 ];
 
 describe("projects", () => {
-  it("provides twenty-two local, replaceable gallery entries", () => {
-    expect(projects).toHaveLength(22);
+  it("provides twenty-four local, replaceable gallery entries", () => {
+    expect(projects).toHaveLength(24);
     expect(projects.every((project) => project.image.startsWith("/gallery/"))).toBe(true);
-    expect(new Set(projects.map((project) => project.id)).size).toBe(22);
+    expect(new Set(projects.map((project) => project.id)).size).toBe(24);
   });
 
   it("keeps all visible project copy in English", () => {
@@ -56,7 +56,7 @@ describe("projects", () => {
     expect(projects.slice(0, 12).every((project) => project.video === undefined)).toBe(true);
   });
 
-  it("uses the approved copy and local media for the ten video projects", () => {
+  it("uses the approved copy and local media for the twelve video projects", () => {
     expect(projects.slice(12).map(({ title, description }) => [title, description])).toEqual([
       ["Cinematic Study 01", "AI Live-Action Film"],
       ["Cinematic Study 02", "AI Live-Action Film"],
@@ -68,6 +68,8 @@ describe("projects", () => {
       ["AI Hallucination", "Paper Collage Film"],
       ["Midnight Line", "Title Sequence"],
       ["Urban Fault", "Game Promotional Film"],
+      ["Cinematic Study 03", "AI Live-Action Film"],
+      ["Comic Drama Study 01", "AI Comic Drama"],
     ]);
     expect(
       projects.slice(12).every((project) => project.video?.startsWith("/gallery/videos/")),
