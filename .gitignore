@@ -8,5 +8,6 @@ test-results/
 playwright-report/
 node_modules/
 .next/
+tsconfig.tsbuildinfo
 dist/
 .worktrees/
