@@ -5,6 +5,9 @@
   --camera-advance: 0;
   --hero-copy-opacity: 1;
   --gallery-reveal: 0;
+  --hero-pointer-x: 0;
+  --hero-pointer-y: 0;
+  --hero-image-scale: 1;
   position: fixed;
   inset: 0;
   min-width: 980px;
@@ -31,6 +34,8 @@
   will-change: opacity, transform;
 }
 
+.hero-cover * { pointer-events: none !important; }
+
 .hero-fallback,
 .hero-canvas {
   position: absolute;
@@ -42,11 +47,18 @@
 .hero-fallback {
   object-fit: cover;
   opacity: 1;
-  transition: opacity 420ms ease;
+  scale: var(--hero-image-scale);
+  transform: translate3d(
+    calc(var(--hero-pointer-x) * -10px),
+    calc(var(--hero-pointer-y) * 8px),
+    0
+  );
+  animation: hero-light-breathe 7s ease-in-out infinite;
+  will-change: filter, transform;
 }
 
 .hero-canvas { opacity: 0; transition: opacity 420ms ease; }
-.hero-webgl-ready .hero-fallback { opacity: 0; }
+.hero-webgl-ready .hero-fallback { opacity: 1; }
 .hero-webgl-ready .hero-canvas { opacity: 1; }
 .portfolio-experience:not(.hero-webgl-ready) .hero-copy,
 .portfolio-experience:not(.hero-webgl-ready) .hero-works-cue,
@@ -106,6 +118,11 @@
 
 .hero-scroll-cue i { width: 1px; height: 44px; background: currentColor; }
 
+/* The approved cover art already contains the exact display lettering. */
+.hero-copy,
+.hero-works-cue,
+.hero-scroll-cue { opacity: 0; }
+
 .portfolio-experience .gallery-stage {
   z-index: 1;
   opacity: var(--gallery-reveal);
@@ -114,9 +131,15 @@
 
 .portfolio-experience[data-phase="gallery"] .gallery-stage { pointer-events: auto; }
 
+@keyframes hero-light-breathe {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.018); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-canvas { display: none; }
   .hero-fallback { opacity: 1; }
   .hero-cover,
   .hero-copy { transition: none; transform: none; }
+  .hero-fallback { animation: none; transform: none; }
 }

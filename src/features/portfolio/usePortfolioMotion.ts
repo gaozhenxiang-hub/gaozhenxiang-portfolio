@@ -182,6 +182,18 @@ export function usePortfolioMotion() {
       stage.style.setProperty("--camera-advance", hero.cameraAdvance.toFixed(4));
       stage.style.setProperty("--hero-copy-opacity", hero.copyOpacity.toFixed(4));
       stage.style.setProperty("--gallery-reveal", hero.galleryReveal.toFixed(4));
+      stage.style.setProperty(
+        "--hero-pointer-x",
+        ((pointerRef.current.x - 0.5) * pointerRef.current.strength).toFixed(4),
+      );
+      stage.style.setProperty(
+        "--hero-pointer-y",
+        ((pointerRef.current.y - 0.5) * pointerRef.current.strength).toFixed(4),
+      );
+      stage.style.setProperty(
+        "--hero-image-scale",
+        (1 + pointerRef.current.strength * 0.012).toFixed(4),
+      );
       stage.dataset.phase = layout.heroProgress >= 0.999 ? "gallery" : "hero";
       stage.dataset.pointerActive = pointerRef.current.strength > 0.025 ? "true" : "false";
 

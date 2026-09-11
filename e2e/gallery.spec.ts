@@ -1,7 +1,47 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+async function enterGallery(page: Page) {
+  const experience = page.getByTestId("portfolio-experience");
+  await expect(experience).toHaveClass(/hero-webgl-ready/);
+  const height = page.viewportSize()?.height ?? 900;
+  await page.mouse.wheel(0, height / 0.92 + 2);
+  await expect(experience).toHaveAttribute("data-phase", "gallery");
+}
+
+test("cover opens into the gallery and reverses back to the identity", async ({ page }) => {
+  const browserErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") {
+      browserErrors.push(`${message.text()} ${message.location().url}`.trim());
+    }
+  });
+  page.on("response", (response) => {
+    if (response.status() >= 400) browserErrors.push(`${response.status()} ${response.url()}`);
+  });
+  page.on("pageerror", (error) => browserErrors.push(error.message));
+  await page.goto("/");
+
+  const experience = page.getByTestId("portfolio-experience");
+  await expect(experience).toHaveAttribute("data-phase", "hero");
+  await expect(page.getByTestId("hero-fallback")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "高振翔", level: 1 })).toBeAttached();
+  await expect(page.getByText("AIGC CREATOR").first()).toBeAttached();
+  await expect(page.getByText("SCROLL TO EXPLORE")).toBeAttached();
+
+  await enterGallery(page);
+  await expect(page.getByRole("heading", { name: "Selected Works" })).toBeVisible();
+
+  const height = page.viewportSize()?.height ?? 900;
+  await page.mouse.wheel(0, -(height / 0.92 + 2));
+  await expect(experience).toHaveAttribute("data-phase", "hero");
+  await expect(page.getByTestId("hero-fallback")).toBeVisible();
+  expect(browserErrors).toEqual([]);
+});
 
 test("gallery renders and responds to wheel and pointer drag", async ({ page }) => {
   await page.goto("/");
+
+  await enterGallery(page);
 
   await expect(page.getByRole("heading", { name: "Selected Works" })).toBeVisible();
   await expect(page.getByTestId("project-card")).toHaveCount(24);
@@ -45,6 +85,8 @@ test("gallery renders and responds to wheel and pointer drag", async ({ page }) 
 test("gallery starts at the captured desktop composition", async ({ page }) => {
   await page.goto("/");
 
+  await enterGallery(page);
+
   const heading = page.getByRole("heading", { name: "Selected Works" });
   const firstCard = page.getByTestId("project-card").first();
   const headingBox = await heading.boundingBox();
@@ -58,6 +100,8 @@ test("gallery starts at the captured desktop composition", async ({ page }) => {
 
 test("receding cards remain rendered beneath the protected title area", async ({ page }) => {
   await page.goto("/");
+
+  await enterGallery(page);
 
   await expect(page.getByTestId("gallery-metadata-mask")).toHaveCount(0);
   const veil = page.getByTestId("gallery-top-veil");
@@ -80,6 +124,8 @@ test("receding cards remain rendered beneath the protected title area", async ({
 test("contact finale follows the projects and returns to the gallery", async ({ page }) => {
   await page.goto("/");
 
+  await enterGallery(page);
+
   const finale = page.getByTestId("contact-finale");
   await expect(page.getByTestId("gallery-stage")).toHaveClass(/webgl-ready/);
   await expect(finale).not.toBeInViewport();
@@ -87,7 +133,7 @@ test("contact finale follows the projects and returns to the gallery", async ({ 
   await page.mouse.wheel(0, 10000);
   await page.waitForTimeout(1400);
 
-  await expect(page.getByRole("heading", { name: "高振翔" })).toBeInViewport();
+  await expect(finale.getByRole("heading", { name: "高振翔" })).toBeInViewport();
   await expect(page.getByRole("link", { name: /电话 13293941800/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /邮箱 13293941800@163.com/ })).toBeVisible();
   const finaleBox = await finale.boundingBox();
@@ -101,6 +147,7 @@ test("contact finale follows the projects and returns to the gallery", async ({ 
 
 test("later projects play muted on hover and reset on exit", async ({ page }) => {
   await page.goto("/");
+  await enterGallery(page);
   const card = page.getByTestId("project-card").nth(23);
 
   for (let attempt = 0; attempt < 24; attempt += 1) {
@@ -116,12 +163,14 @@ test("later projects play muted on hover and reset on exit", async ({ page }) =>
     "src",
     "/gallery/videos/comic-drama-study-01.mp4",
   );
+  await page.waitForTimeout(1200);
   const mediaBox = await media.boundingBox();
   expect(mediaBox).not.toBeNull();
   await page.mouse.move(
     mediaBox!.x + mediaBox!.width / 2,
     mediaBox!.y + mediaBox!.height / 2,
   );
+  await expect(card).toHaveAttribute("data-preview", "playing");
 
   const video = card.locator("video");
   await expect
