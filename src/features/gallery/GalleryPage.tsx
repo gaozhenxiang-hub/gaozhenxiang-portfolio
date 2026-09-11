@@ -9,7 +9,6 @@ import { ContactFinale } from "@/features/contact/ContactFinale";
 import { GalleryCanvas } from "./GalleryCanvas";
 import type { MotionState, PointerInteractionState } from "./gallery-motion";
 import { ProjectMedia } from "./ProjectMedia";
-import { useDragGallery } from "./useDragGallery";
 
 import "./gallery.css";
 
@@ -20,12 +19,9 @@ export function GalleryPage({
   motionRef,
   pointerRef,
 }: {
-  motionRef?: MotionRef;
-  pointerRef?: PointerRef;
-} = {}) {
-  const legacy = useDragGallery();
-  const activeMotionRef = motionRef ?? legacy.motionRef;
-  const activePointerRef = pointerRef ?? legacy.pointerRef;
+  motionRef: MotionRef;
+  pointerRef: PointerRef;
+}) {
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const deactivateProject = (projectId: string) => {
     setActiveProjectId((current) => (current === projectId ? null : current));
@@ -37,7 +33,6 @@ export function GalleryPage({
       data-testid="gallery-stage"
       data-dragging="false"
       data-pointer-active="false"
-      ref={motionRef && pointerRef ? undefined : legacy.stageRef}
     >
       <div className="gallery-atmosphere" aria-hidden="true" />
 
@@ -48,8 +43,8 @@ export function GalleryPage({
       <div className="gallery-viewport">
         <GalleryCanvas
           activeProjectId={activeProjectId}
-          motionRef={activeMotionRef}
-          pointerRef={activePointerRef}
+          motionRef={motionRef}
+          pointerRef={pointerRef}
         />
         <div className="gallery-grid gallery-grid--metadata">
           {projects.map((project) => (

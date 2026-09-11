@@ -1,5 +1,5 @@
-import { GalleryPage } from "@/features/gallery/GalleryPage";
+import { PortfolioExperience } from "@/features/portfolio/PortfolioExperience";
 
 export default function Home() {
-  return <GalleryPage />;
+  return <PortfolioExperience />;
 }
