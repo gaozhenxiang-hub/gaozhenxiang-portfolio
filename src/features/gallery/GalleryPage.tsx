@@ -7,25 +7,37 @@ import { useState } from "react";
 import { projects } from "@/content/projects";
 import { ContactFinale } from "@/features/contact/ContactFinale";
 import { GalleryCanvas } from "./GalleryCanvas";
+import type { MotionState, PointerInteractionState } from "./gallery-motion";
 import { ProjectMedia } from "./ProjectMedia";
 import { useDragGallery } from "./useDragGallery";
 
 import "./gallery.css";
 
-export function GalleryPage() {
-  const { stageRef, motionRef, pointerRef } = useDragGallery();
+type MotionRef = { current: MotionState };
+type PointerRef = { current: PointerInteractionState };
+
+export function GalleryPage({
+  motionRef,
+  pointerRef,
+}: {
+  motionRef?: MotionRef;
+  pointerRef?: PointerRef;
+} = {}) {
+  const legacy = useDragGallery();
+  const activeMotionRef = motionRef ?? legacy.motionRef;
+  const activePointerRef = pointerRef ?? legacy.pointerRef;
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const deactivateProject = (projectId: string) => {
     setActiveProjectId((current) => (current === projectId ? null : current));
   };
 
   return (
-    <main
+    <section
       className="gallery-stage"
       data-testid="gallery-stage"
       data-dragging="false"
       data-pointer-active="false"
-      ref={stageRef}
+      ref={motionRef && pointerRef ? undefined : legacy.stageRef}
     >
       <div className="gallery-atmosphere" aria-hidden="true" />
 
@@ -36,8 +48,8 @@ export function GalleryPage() {
       <div className="gallery-viewport">
         <GalleryCanvas
           activeProjectId={activeProjectId}
-          motionRef={motionRef}
-          pointerRef={pointerRef}
+          motionRef={activeMotionRef}
+          pointerRef={activePointerRef}
         />
         <div className="gallery-grid gallery-grid--metadata">
           {projects.map((project) => (
@@ -71,6 +83,6 @@ export function GalleryPage() {
       <div className="drag-cue" aria-hidden="true">
         <img src="/gallery/drag-arrows.svg" alt="" />
       </div>
-    </main>
+    </section>
   );
 }

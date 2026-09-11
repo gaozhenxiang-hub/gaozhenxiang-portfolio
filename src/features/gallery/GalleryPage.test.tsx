@@ -3,24 +3,48 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { GalleryPage } from "./GalleryPage";
 
+const canvasProps = vi.hoisted(() => ({ motionRef: null as unknown, pointerRef: null as unknown }));
+
 vi.mock("./GalleryCanvas", () => ({
-  GalleryCanvas: () => <div data-testid="gallery-canvas" />,
+  GalleryCanvas: (props: { motionRef: unknown; pointerRef: unknown }) => {
+    canvasProps.motionRef = props.motionRef;
+    canvasProps.pointerRef = props.pointerRef;
+    return <div data-testid="gallery-canvas" />;
+  },
 }));
 
-vi.mock("./useDragGallery", () => ({
-  useDragGallery: () => ({
-    stageRef: { current: null },
-    motionRef: { current: { current: 0, target: 0, velocity: 0 } },
-  }),
-}));
+const sharedMotion = {
+  motionRef: { current: { current: 0, target: 0, velocity: 0 } },
+  pointerRef: {
+    current: {
+      x: 0.5,
+      y: 0.5,
+      targetX: 0.5,
+      targetY: 0.5,
+      strength: 0,
+      targetStrength: 0,
+      velocityX: 0,
+      velocityY: 0,
+    },
+  },
+};
+
+const renderGallery = () => render(<GalleryPage {...sharedMotion} />);
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
 describe("GalleryPage", () => {
+  it("passes the shared experience motion into the WebGL gallery", () => {
+    renderGallery();
+
+    expect(canvasProps.motionRef).toBe(sharedMotion.motionRef);
+    expect(canvasProps.pointerRef).toBe(sharedMotion.pointerRef);
+  });
+
   it("renders the captured gallery hierarchy and all projects", () => {
-    render(<GalleryPage />);
+    renderGallery();
 
     expect(screen.getByRole("heading", { name: "Selected Works" })).toBeVisible();
     expect(screen.getByText("Blue Portal")).toBeVisible();
@@ -32,7 +56,7 @@ describe("GalleryPage", () => {
   });
 
   it("omits the project category filter row", () => {
-    render(<GalleryPage />);
+    renderGallery();
 
     expect(screen.queryByText("All")).not.toBeInTheDocument();
     expect(screen.queryByText("Branding")).not.toBeInTheDocument();
@@ -40,7 +64,7 @@ describe("GalleryPage", () => {
   });
 
   it("omits the original studio brand and top navigation", () => {
-    render(<GalleryPage />);
+    renderGallery();
 
     expect(screen.queryByText("unseen studio")).not.toBeInTheDocument();
     expect(screen.queryByRole("navigation", { name: "Primary" })).not.toBeInTheDocument();
@@ -48,7 +72,7 @@ describe("GalleryPage", () => {
   });
 
   it("renders the approved contact finale with callable links", () => {
-    render(<GalleryPage />);
+    renderGallery();
 
     expect(screen.getByTestId("contact-finale")).toBeVisible();
     expect(screen.getByRole("heading", { name: "高振翔" })).toBeVisible();
@@ -68,7 +92,7 @@ describe("GalleryPage", () => {
     const pause = vi
       .spyOn(HTMLMediaElement.prototype, "pause")
       .mockImplementation(() => undefined);
-    render(<GalleryPage />);
+    renderGallery();
 
     const cards = screen.getAllByTestId("project-card");
     expect(screen.getAllByTestId("project-video")).toHaveLength(12);
