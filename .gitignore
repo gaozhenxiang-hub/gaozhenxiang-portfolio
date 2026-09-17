@@ -11,3 +11,9 @@ node_modules/
 tsconfig.tsbuildinfo
 dist/
 .worktrees/
+.vercel
+
+# Local artifacts and environment secrets
+output/
+.env*
+!.env.example

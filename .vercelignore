@@ -1,0 +1,12 @@
+output/
+docs/
+.git/
+.next/
+node_modules/
+.superpowers/
+.playwright-cli/
+test-results/
+playwright-report/
+e2e/
+*.tsbuildinfo
+.env*
